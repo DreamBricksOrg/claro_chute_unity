@@ -1,0 +1,29 @@
+{
+    "api":{
+        "baseUrl": "https://clarotvboxchute.ngrok.app"
+    },
+    "timeout": {
+        "howtoplay": 1,
+        "finalscore": 2,
+        "gameover": 2
+    },
+    "settings":{
+        "bgmVolume": 80,
+        "sfxVolume": 100,
+        "bgsVolume": 20
+    },
+    "game":{
+        "roundCount": 10,
+        "duration": 1200,
+        "ballPower": 2.0,
+        "ballSpeedLimitRange": [1.0, 10.0],
+        "ballLifespan": 3,
+        "throwVelocityThreshold": 1.0,
+        "throwDecelerationThreshold": 5.0,
+        "playerLocation": {
+            "x": 0,
+            "y": 0.2,
+            "z": 3.5
+        }
+    }
+}
