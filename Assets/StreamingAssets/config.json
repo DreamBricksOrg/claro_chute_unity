@@ -20,6 +20,8 @@
         "ballLifespan": 3,
         "throwVelocityThreshold": 1.0,
         "throwDecelerationThreshold": 5.0,
+        "displaySpeedScale": 10.0,
+        "displaySpeedRange": [3.0, 90.0],
         "playerLocation": {
             "x": 0,
             "y": 0.2,

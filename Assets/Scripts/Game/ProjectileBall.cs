@@ -26,11 +26,24 @@ public class ProjectileBall : MonoBehaviour
     public void Play(Vector3 direction, float velocity = 1f)
     {
         AudioController.PlaySFX(AudioTypes.SFX_ballShoot);
-        EventManager.Game.ShootSpeed(velocity);
+        
+        // Aplicar escala de velocidade apenas para exibição
+        var displayScale = Config.Instance.configData["game"]["displaySpeedScale"].AsFloat;
+        var displayRange = Config.Instance.configData["game"]["displaySpeedRange"];
+        var displaySpeed = velocity * displayScale;
+        
+        // Limitar a velocidade exibida dentro do intervalo configurado
+        displaySpeed = Mathf.Clamp(displaySpeed, displayRange[0].AsFloat, displayRange[1].AsFloat);
+        
+        // Enviar a velocidade escalada para exibição
+        EventManager.Game.ShootSpeed(displaySpeed);
+        
         Destroy(gameObject, Config.Instance.configData["game"]["ballLifespan"].AsInt);
         isActive = true;
         colliderComponent.enabled = true;
         trailRenderer.enabled = true;
+        
+        // A física da bola permanece inalterada
         rb.velocity = direction.normalized * (velocity * ballSpeed);
         rb.angularDrag = 0.05f;
         rb.isKinematic = false;
