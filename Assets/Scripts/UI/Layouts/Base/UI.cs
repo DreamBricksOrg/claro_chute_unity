@@ -177,11 +177,14 @@ public enum UITypes
     None = -1,
 
     Intro = 10,
+    Ranking = 11,
     HowToPlay = 20,
     Countdown = 30,
     GameHUD = 40,
     FinalScore = 70,
     Gameover = 80,
+    Replay = 90,
+    Schedule = 100,
 
     DeveloperMode = 999,
 }
