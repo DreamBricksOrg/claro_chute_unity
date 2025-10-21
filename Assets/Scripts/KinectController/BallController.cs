@@ -14,6 +14,9 @@ public class BallController : MonoBehaviour
     public Transform pinnedPosition;
     public bool isPlaying = false;
 
+    // Evento disparado imediatamente antes da bola nascer
+    public event Action OnBallPreSpawn;
+
     void OnEnable()
     {
         EventManager.Game.OnGameStartEvent += OnGameStart;
@@ -88,6 +91,10 @@ public class BallController : MonoBehaviour
     {
         if (!isPlaying) return;
         if (currentBallInstance != null) return;
+
+        // Avisar assinantes antes da criação da bola para definição do ponto zero
+        OnBallPreSpawn?.Invoke();
+
         var currentBall = Instantiate(ballPrefab[currentBallStyle], pinnedPosition.position, Quaternion.identity);
         currentBall.transform.localScale = Vector3.zero;
         currentBall.transform.position = pinnedPosition.position + new Vector3(0f, 1f, 0f);

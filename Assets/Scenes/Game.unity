@@ -2939,6 +2939,9 @@ MonoBehaviour:
   throwDecelerationThreshold: 5
   forwardDotThreshold: 0.8
   cooldownTime: 0.5
+  forwardCrossMargin: 0.05
+  useCameraForward: 1
+  forwardReference: {fileID: 0}
   isDebugMode: 0
   isPlaying: 0
 --- !u!23 &566184007
@@ -2948,7 +2951,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 566184004}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4328,7 +4331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: licenseKey
-      value: license:62345:ydrhJ2xvjS46uTDO
+      value: license:62420:PNMPL1pEi8sYgqWW
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: colorModuleOn
@@ -10283,6 +10286,9 @@ MonoBehaviour:
   throwDecelerationThreshold: 5
   forwardDotThreshold: 0.8
   cooldownTime: 0.5
+  forwardCrossMargin: 0.05
+  useCameraForward: 1
+  forwardReference: {fileID: 0}
   isDebugMode: 0
   isPlaying: 0
 --- !u!23 &991119086
@@ -10292,7 +10298,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 991119083}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -15104,6 +15110,9 @@ MonoBehaviour:
   throwDecelerationThreshold: 5
   forwardDotThreshold: 0.8
   cooldownTime: 0.5
+  forwardCrossMargin: 0.05
+  useCameraForward: 1
+  forwardReference: {fileID: 0}
   isDebugMode: 0
   isPlaying: 1
 --- !u!23 &1711807332
@@ -17018,6 +17027,9 @@ MonoBehaviour:
   throwDecelerationThreshold: 5
   forwardDotThreshold: 0.8
   cooldownTime: 0.5
+  forwardCrossMargin: 0.05
+  useCameraForward: 1
+  forwardReference: {fileID: 0}
   isDebugMode: 0
   isPlaying: 1
 --- !u!23 &1926172076
