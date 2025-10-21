@@ -182,6 +182,7 @@ public enum UITypes
     Countdown = 30,
     GameHUD = 40,
     FinalScore = 70,
+    QRCode = 71,
     Gameover = 80,
     Replay = 90,
     Schedule = 100,
