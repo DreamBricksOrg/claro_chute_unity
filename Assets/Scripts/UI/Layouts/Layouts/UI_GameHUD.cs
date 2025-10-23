@@ -19,9 +19,7 @@ public class UI_GameHUD : UI
     private Toggle[] toggleList;
     public UIAnimationModule uiAnimSpeed;
 
-    public bool canRecord = true;
-
-    // ADD FADE
+    bool isRecording = false;
 
     void OnEnable()
     {
@@ -32,7 +30,6 @@ public class UI_GameHUD : UI
         EventManager.Game.OnShootSpeedEvent += OnShootSpeed;
         EventManager.Game.OnShootResultEvent += OnShootResult;
         EventManager.Game.OnNextRoundEvent += OnNextRound;
-
     }
 
     void OnDisable()
@@ -49,14 +46,20 @@ public class UI_GameHUD : UI
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
-        StartRecording();
+        isRecording = false;
+        // Invoke("StopRecording", 1f);
     }
 
     private void OnNextRound()
     {
         FadeInOut();
+
         // Reset Goalkeeper
-        StartRecording();
+
+        if (GameRoundController.Instance.gameScoreList.Count == 1)
+        {
+            StartRecording();
+        }
     }
 
     internal override void Start()
@@ -91,7 +94,8 @@ public class UI_GameHUD : UI
         fieldGameShootSpeed.text = "";
         uiAnimSpeed.Out();
         Invoke(nameof(UpdateRound), 0.1f);
-        StopRecording();
+
+        if (isRecording) StopRecording();
     }
 
     private void OnShootSpeed(float speed)
@@ -154,7 +158,7 @@ public class UI_GameHUD : UI
 
     void StartRecording()
     {
-        if (!canRecord) return;
+        isRecording = true;
         Debug.Log("<<Recording Started>>");
         API.Request("/obs/recording/start",
            onSuccess: (result) =>
@@ -171,7 +175,7 @@ public class UI_GameHUD : UI
 
     void StopRecording()
     {
-        if (!canRecord) return;
+        isRecording = false;
         Debug.Log("<<Recording STOPPED>>");
         API.Request("/obs/recording/stop",
             onSuccess: (result) =>

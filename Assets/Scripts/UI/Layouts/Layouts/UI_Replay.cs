@@ -10,59 +10,71 @@ public class UI_Replay : UI
 	public TMP_Text fieldScore;
 	public TMP_Text fieldRanking;
 	public VideoPlayer videoPlayer;
-	public CanvasGroup replayerCanvasGroup;
 
-	internal override void OnShow(object data, Action<object> callback)
+	internal override void Start()
 	{
-		base.OnShow(data, callback);
+		base.Start();
+		EventManager.VideoReplay.OnVideoReplayProcessEvent += OnVideoReplayProcess;
+		EventManager.VideoReplay.OnVideoReplayCompletedEvent += OnVideoReplayCompleted;
+	}
 
-		replayerCanvasGroup.DOFade(1f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+	internal override void OnDestroy()
+	{
+		base.OnDestroy();
+		EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
+		EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
+	}
 
-		fieldScore.SetText("");
-		fieldRanking.SetText("");
-
-		API.Request("/api/playerdata/" + GameRoundController.Instance.playerId,
+	private void OnVideoReplayProcess()
+	{
+		API.Request("/api/process-video/" + GameRoundController.Instance.playerId,
 			onSuccess: (result) =>
 			{
 				var jsonData = JSON.Parse(result);
-				fieldScore.SetText(jsonData["player"]["score"].Value + "<size=40%>km/h</size>");
-				fieldRanking.SetText(jsonData["player"]["position"].Value + "º");
+				Debug.Log("<<Video Generation Response>>" + jsonData.ToString());
+
+				// Loading
+
+				EventManager.VideoReplay.VideoReplayCompleted(jsonData["video"]["download_url"].Value);
+        		EventManager.Section.SetSection(SectionTypes.Replay);
+
+
+				//                 {
+				//     "status": "success",
+				//     "player": {
+				//         "id": "180c5dbf-5386-49ae-97c0-9306a96716ea",
+				//         "score": 201,
+				//         "position": 7,
+				//         "created_at": "2025-10-23T21:36:08.592000"
+				//     },
+				//     "video": {
+				//         "original_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox.mp4",
+				//         "processed_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4",
+				//         "path": "/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
+				//         "download_url": "https://clarotvboxchute.ngrok.app/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
+				//         "processed": true,
+				//         "processing_time": 3.404806137084961,
+				//         "output_file": "C:\\Users\\db\\Documents\\db\\prj\\claro_tvbox\\claro_tvbox_server\\app\\recordings\\180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4"
+				//     },
+				//     "message": "Vídeo processado com sucesso com labels aplicados"
+				// }
+
 			},
 			onError: (error) =>
 			{
-				Debug.LogError("API Error: " + error);
-			}
-		);
-
-		GetVideoReplay();
-
-	}
-
-	private void GetVideoReplay()
-	{
-		API.Request("/api/getvideo/" + GameRoundController.Instance.playerId,
-			onSuccess: (result) =>
-			{
-				var jsonData = JSON.Parse(result);
-				
-				videoPlayer.url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-				// videoPlayer.url = jsonData["video_url"].Value;
-				videoPlayer.loopPointReached += OnVideoEnd;
-				videoPlayer.Play();
-			},
-			onError: (error) =>
-			{
+        		EventManager.Section.SetSection(SectionTypes.Gameover);
 				Debug.LogError("API Error: " + error);
 			}
 		);
 	}
 
-	internal override void OnHide(object data, Action<object> callback)
+	private void OnVideoReplayCompleted(string url)
 	{
-		base.OnHide(data, callback);
-		replayerCanvasGroup.DOKill();
+		Debug.Log("<<Playing Replay Video>>" + url);
+		videoPlayer.url = url;
+		// videoPlayer.loopPointReached += OnVideoEnd;
+		videoPlayer.Play();
 	}
-
 
 	private void OnVideoEnd(VideoPlayer source)
 	{

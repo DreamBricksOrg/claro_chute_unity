@@ -27,7 +27,6 @@ public class DevBallShoot : MonoBehaviour, InputControls.IGameActions
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        Debug.Log(">>> DevBallShoot OnFire triggered.");
         if (context.performed)
         {
             var direction = transform.forward;

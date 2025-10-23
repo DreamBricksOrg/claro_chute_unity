@@ -7,7 +7,7 @@ public class Main : MonoBehaviour
 {
     public static Main Instance;
     CancellationTokenSource cts;
-    
+
     [Header("Section")]
     public SectionTypes beginSectionType = SectionTypes.Intro;
 
@@ -95,10 +95,10 @@ public class Main : MonoBehaviour
                 break;
             case SectionTypes.QRCode:
                 UI.Show(UITypes.QRCode);
-                Utils.DelayAction(timeoutArray["qrcode"].AsInt, () =>
-                {
-                    EventManager.Section.SetSection(SectionTypes.Replay);
-                });
+                // cts = Utils.DelayActionCancelable(timeoutArray["qrcode"].AsInt, () =>
+                // {
+                //     EventManager.Section.SetSection(SectionTypes.Gameover);
+                // });
                 break;
             case SectionTypes.Replay:
                 UI.Show(UITypes.Replay);
@@ -115,11 +115,7 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.Schedule:
-                UI.Show(UITypes.Schedule);
-                Utils.DelayAction(timeoutArray["schedule"].AsInt, () =>
-                {
-                    EventManager.Section.SetSection(SectionTypes.Intro);
-                });
+                UI.Show(UITypes.Schedule);                
                 break;
         }
     }

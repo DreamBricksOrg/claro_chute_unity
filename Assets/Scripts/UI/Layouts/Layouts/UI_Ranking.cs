@@ -47,9 +47,11 @@ public class UI_Ranking : UI
 		ClearRanking();
         for (int i = 0; i < playerList.Count; i++)
         {
+            if (i >= 10) break;
             var rankingBox = Instantiate(togglePrefab, toggleRoot);
 			var comp = rankingBox.GetComponent<Widget_RankingBox>();
-			comp.SetAttributes(playerList[i]);
+            comp.SetAttributes(playerList[i]);
+            
         }
     }
 }

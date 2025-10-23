@@ -21,7 +21,9 @@ public static class EventManager
         public delegate void ShootSpeedHandler(float speed);
         public delegate void ShootResultHandler(bool isGoal, string info);
         public delegate void NextRoundHandler();
-
+        // VideoReplay
+        public delegate void VideoReplayProcessHandler();
+        public delegate void VideoReplayCompletedHandler(string url);
     }
 
     public static class Section
@@ -62,6 +64,14 @@ public static class EventManager
         public static void ShootResult(bool isGoal, string info) => OnShootResultEvent?.Invoke(isGoal, info);
         public static event Delegates.NextRoundHandler OnNextRoundEvent;
         public static void NextRound() => OnNextRoundEvent?.Invoke();
+    }
+
+    public static class VideoReplay
+    {
+        public static event Delegates.VideoReplayProcessHandler OnVideoReplayProcessEvent;
+        public static void VideoReplayProcess() => OnVideoReplayProcessEvent?.Invoke();
+        public static event Delegates.VideoReplayCompletedHandler OnVideoReplayCompletedEvent;
+        public static void VideoReplayCompleted(string url) => OnVideoReplayCompletedEvent?.Invoke(url);
     }
 
     public static class Element

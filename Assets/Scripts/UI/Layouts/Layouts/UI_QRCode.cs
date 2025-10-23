@@ -11,6 +11,23 @@ public class UI_QRCode : UI
     private Texture2D currentQRTexture;
     private bool isDestroyed = false;
 
+    internal override void Start()
+    {
+        base.Start();
+        EventManager.VideoReplay.OnVideoReplayProcessEvent += OnVideoReplayProcess;
+        EventManager.VideoReplay.OnVideoReplayCompletedEvent += OnVideoReplayCompleted;
+    }
+
+    internal override void OnDestroy()
+    {
+        base.OnDestroy();
+        EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
+        EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
+        isDestroyed = true;
+        DisposeCurrentTexture();
+        base.OnDestroy();
+    }
+
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
@@ -27,6 +44,9 @@ public class UI_QRCode : UI
                 if (isDestroyed) return;
                 try
                 {
+                    // Process Video
+                    EventManager.VideoReplay.VideoReplayProcess();
+
                     var response = JSON.Parse(result);
                     string base64 = response["qr_code"].Value;
 
@@ -59,11 +79,12 @@ public class UI_QRCode : UI
         DisposeCurrentTexture();
     }
 
-    internal override void OnDestroy()
+    private void OnVideoReplayProcess()
     {
-        isDestroyed = true;
-        DisposeCurrentTexture();
-        base.OnDestroy();
+    }
+
+    private void OnVideoReplayCompleted(string url)
+    {
     }
 
     private void DisposeCurrentTexture()

@@ -18,7 +18,6 @@ public class GameRoundController : MonoBehaviour
     public static bool IsGameRunning = false;
     Coroutine gameplayRoundTimeRoutine;
 
-
     public string playerId = "ae0d3e95-f28d-4c10-83ce-6886fae624ea";
 
     public List<RoundResult> gameScoreList = new List<RoundResult>();
