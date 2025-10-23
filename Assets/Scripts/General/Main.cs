@@ -58,6 +58,7 @@ public class Main : MonoBehaviour
     {
         var timeoutArray = Config.Instance.configData["timeout"];
         UI.HideAll();
+        Utils.CancelDelay(cts);
         switch (sectionType)
         {
             case SectionTypes.Intro:
@@ -81,14 +82,13 @@ public class Main : MonoBehaviour
                     EventManager.Section.SetSection(SectionTypes.Intro);
                 });
                 break;
-            case SectionTypes.Game:
-                Utils.CancelDelay(cts);
+            case SectionTypes.Game:                
                 UI.Show(UITypes.GameHUD);
                 EventManager.Game.GameStart();
                 break;
             case SectionTypes.FinalScore:
                 UI.Show(UITypes.FinalScore);
-                Utils.DelayAction(timeoutArray["finalscore"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["finalscore"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.QRCode);
                 });
@@ -102,20 +102,20 @@ public class Main : MonoBehaviour
                 break;
             case SectionTypes.Replay:
                 UI.Show(UITypes.Replay);
-                Utils.DelayAction(timeoutArray["replay"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["replay"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.Gameover);
                 });
                 break;
             case SectionTypes.Gameover:
                 UI.Show(UITypes.Gameover);
-                Utils.DelayAction(timeoutArray["gameover"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["gameover"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.Intro);
                 });
                 break;
             case SectionTypes.Schedule:
-                UI.Show(UITypes.Schedule);                
+                UI.Show(UITypes.Schedule);
                 break;
         }
     }

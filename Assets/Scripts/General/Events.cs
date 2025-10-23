@@ -24,12 +24,21 @@ public static class EventManager
         // VideoReplay
         public delegate void VideoReplayProcessHandler();
         public delegate void VideoReplayCompletedHandler(string url);
+        // Core System
+        public delegate void CoreSystemStateHandler(bool isCoreSystemWorking);
+
     }
 
     public static class Section
     {
         public static event Delegates.SectionHandler OnSectionEvent;
         public static void SetSection(SectionTypes section) => OnSectionEvent?.Invoke(section);
+    }
+
+    public static class CoreSystem
+    {
+        public static event Delegates.CoreSystemStateHandler OnCoreSystemStateEvent;
+        public static void SetState(bool isCoreSystemWorking) => OnCoreSystemStateEvent?.Invoke(isCoreSystemWorking);
     }
 
     public static class Kinect

@@ -18,7 +18,8 @@
         "bgsVolume": 20
     },
     "info":{
-        "schedule": "10h às 22h"
+        "scheduleStart": "20:20",
+        "scheduleStop": "20:19"
     },
     "game":{
         "roundCount": 3,
