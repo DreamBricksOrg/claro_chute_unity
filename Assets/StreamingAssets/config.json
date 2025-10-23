@@ -6,9 +6,9 @@
         "intro": 8,
         "ranking": 8,
         "howtoplay": 8,
-        "finalscore": 8,
-        "qrcode": 8,
-        "replay": 5,
+        "finalscore": 6,
+        "qrcode": 6,
+        "replay": 10,
         "gameover": 5,
         "schedule": 5
     },

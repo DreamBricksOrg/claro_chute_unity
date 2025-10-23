@@ -10,11 +10,6 @@ public class UI_FinalScore : UI
     public TMP_Text fieldScore;
     public TMP_Text fieldRanking;
 
-    internal override void Awake()
-    {
-        base.Awake();
-    }
-
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
