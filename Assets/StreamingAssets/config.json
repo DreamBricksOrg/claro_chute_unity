@@ -22,7 +22,7 @@
     },
     "game":{
         "roundCount": 2,
-        "duration": 5,
+        "duration": 60,
         "ballPower": 2.0,
         "ballSpeedLimitRange": [1.0, 10.0],
         "ballLifespan": 3,

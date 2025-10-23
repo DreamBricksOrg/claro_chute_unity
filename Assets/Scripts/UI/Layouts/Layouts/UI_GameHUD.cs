@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using SimpleJSON;
 
 public class UI_GameHUD : UI
 {
@@ -14,11 +15,13 @@ public class UI_GameHUD : UI
     // public UIAnimationModule uIAnimationModule;
     public Transform toggleRoot;
     public GameObject togglePrefab;
-    public Toggle[] toggleList;
+    public CanvasGroup fadeCanvasGroup;
+    private Toggle[] toggleList;
     public UIAnimationModule uiAnimSpeed;
 
+    public bool canRecord = true;
+
     // ADD FADE
-    // ADD chutes
 
     void OnEnable()
     {
@@ -28,6 +31,8 @@ public class UI_GameHUD : UI
         EventManager.Game.OnGameEndEvent += OnGameEnd;
         EventManager.Game.OnShootSpeedEvent += OnShootSpeed;
         EventManager.Game.OnShootResultEvent += OnShootResult;
+        EventManager.Game.OnNextRoundEvent += OnNextRound;
+
     }
 
     void OnDisable()
@@ -38,6 +43,20 @@ public class UI_GameHUD : UI
         EventManager.Game.OnGameEndEvent -= OnGameEnd;
         EventManager.Game.OnShootSpeedEvent -= OnShootSpeed;
         EventManager.Game.OnShootResultEvent -= OnShootResult;
+        EventManager.Game.OnNextRoundEvent -= OnNextRound;
+    }
+
+    internal override void OnShow(object data, Action<object> callback)
+    {
+        base.OnShow(data, callback);
+        StartRecording();
+    }
+
+    private void OnNextRound()
+    {
+        FadeInOut();
+        // Reset Goalkeeper
+        StartRecording();
     }
 
     internal override void Start()
@@ -46,7 +65,7 @@ public class UI_GameHUD : UI
         ClearRoundToggles();
         CreateRoundToggles(Config.Instance.configData["game"]["roundCount"].AsInt);
         UpdateRound();
-    } 
+    }
 
     void ClearRoundToggles()
     {
@@ -72,6 +91,7 @@ public class UI_GameHUD : UI
         fieldGameShootSpeed.text = "";
         uiAnimSpeed.Out();
         Invoke(nameof(UpdateRound), 0.1f);
+        StopRecording();
     }
 
     private void OnShootSpeed(float speed)
@@ -81,7 +101,7 @@ public class UI_GameHUD : UI
     }
 
     void ApplySpeedText(float speed)
-    {       
+    {
         fieldGameShootSpeed.text = speed.ToString("0") + "<size=40%>km/h</size>";
     }
 
@@ -92,6 +112,15 @@ public class UI_GameHUD : UI
         {
             toggleList[i].isOn = (roundList.Count > i);
         }
+    }
+
+    void FadeInOut()
+    {
+        fadeCanvasGroup.DOKill();
+        var sequence = DOTween.Sequence();
+        fadeCanvasGroup.alpha = 0f;
+        sequence.Append(fadeCanvasGroup.DOFade(1f, 0.5f))  // Fade in
+               .Append(fadeCanvasGroup.DOFade(0f, 0.5f));  // Fade out
     }
 
     // internal override void Start()
@@ -121,5 +150,39 @@ public class UI_GameHUD : UI
     private void OnGameScore(int globalScore)
     {
         fieldGameScore.text = globalScore.ToString("0");
+    }
+
+    void StartRecording()
+    {
+        if (!canRecord) return;
+        Debug.Log("<<Recording Started>>");
+        API.Request("/obs/recording/start",
+           onSuccess: (result) =>
+           {
+               var jsonData = JSON.Parse(result);
+               Debug.Log(jsonData["message"].Value);
+           },
+           onError: (error) =>
+           {
+               Debug.LogError("API Error: " + error);
+           }
+       );
+    }
+
+    void StopRecording()
+    {
+        if (!canRecord) return;
+        Debug.Log("<<Recording STOPPED>>");
+        API.Request("/obs/recording/stop",
+            onSuccess: (result) =>
+            {
+                var jsonData = JSON.Parse(result);
+                Debug.Log(jsonData["message"].Value);
+            },
+            onError: (error) =>
+            {
+                Debug.LogError("API Error: " + error);
+            }
+        );
     }
 }

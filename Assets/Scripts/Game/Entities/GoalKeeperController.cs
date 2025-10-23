@@ -11,7 +11,7 @@ public class GoalKeeperController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(nameof(Action));
+        // StartCoroutine(nameof(Action));
     }
 
     IEnumerator Action()

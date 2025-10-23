@@ -111,7 +111,7 @@ public class Main : MonoBehaviour
                 UI.Show(UITypes.Gameover);
                 Utils.DelayAction(timeoutArray["gameover"].AsInt, () =>
                 {
-                    EventManager.Section.SetSection(SectionTypes.Schedule);
+                    EventManager.Section.SetSection(SectionTypes.Intro);
                 });
                 break;
             case SectionTypes.Schedule:

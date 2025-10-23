@@ -60,7 +60,7 @@ public class BallController : MonoBehaviour
     {
         isPlaying = true;
         currentBallStyle = 0;
-        Invoke(nameof(GenerateBall), 3f);
+        Invoke(nameof(GenerateBall), 2f);
     }
 
     private void OnGameEnd()
