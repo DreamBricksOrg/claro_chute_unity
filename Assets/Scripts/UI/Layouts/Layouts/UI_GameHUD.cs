@@ -90,7 +90,6 @@ public class UI_GameHUD : UI
         var roundList = GameRoundController.Instance.gameScoreList;
         for (int i = 0; i < toggleList.Length; i++)
         {
-            Debug.Log(">>> Updating Round HUD: " + i + " toggle set to " + (i >= roundList.Count));
             toggleList[i].isOn = (roundList.Count > i);
         }
     }

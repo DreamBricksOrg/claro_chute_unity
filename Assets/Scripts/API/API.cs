@@ -1,77 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
 using System;
-using System.IO;
+using System.Collections;
 
 public class API : MonoBehaviour
 {
+    private static API instance;
+    
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
     public enum APIMethod
     {
         GET,
         POST
     }
 
-    public async Task<string> Request(string endpoint, APIMethod method = APIMethod.GET, string jsonData = null)
+    public static void Request(string endpoint, Action<string> onSuccess, Action<string> onError = null, APIMethod method = APIMethod.GET, string jsonData = null)
     {
-        var url = Path.Combine(Config.Instance.configData["api"]["baseUrl"].Value, endpoint);
-
+        var url = Config.Instance.configData["api"]["baseUrl"].Value + endpoint;
         switch (method)
         {
             case APIMethod.GET:
-                return await Get(url);
+                instance.StartCoroutine(Get(url, onSuccess, onError));
+                break;
             case APIMethod.POST:
-                return await Post(url, jsonData);
+                instance.StartCoroutine(Post(url, jsonData, onSuccess, onError));
+                break;
             default:
-                throw new ArgumentException("Invalid API method");
+                if (onError != null)
+                    onError("Invalid API method");
+                break;
         }
     }
 
-    private async Task<string> Get(string url)
+    private static IEnumerator Get(string url, System.Action<string> onSuccess, System.Action<string> onError)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            var operation = www.SendWebRequest();
-
-            while (!operation.isDone)
-                await Task.Yield();
+            www.SetRequestHeader("accept", "application/json");
+            yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                return www.downloadHandler.text;
+                onSuccess?.Invoke(www.downloadHandler.text);
             }
             else
             {
                 Debug.LogError($"Error: {www.error}");
-                throw new Exception($"GET request failed: {www.error}");
+                onError?.Invoke(www.error);
             }
         }
     }
 
-    private async Task<string> Post(string url, string jsonData)
+    private static IEnumerator Post(string url, string jsonData, System.Action<string> onSuccess, System.Action<string> onError)
     {
         using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("accept", "application/json");
             www.SetRequestHeader("Content-Type", "application/json");
-
-            var operation = www.SendWebRequest();
-
-            while (!operation.isDone)
-                await Task.Yield();
+            yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                return www.downloadHandler.text;
+                onSuccess?.Invoke(www.downloadHandler.text);
             }
             else
             {
                 Debug.LogError($"Error: {www.error}");
-                throw new Exception($"POST request failed: {www.error}");
+                onError?.Invoke(www.error);
             }
         }
     }
