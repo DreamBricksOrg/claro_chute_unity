@@ -36,7 +36,7 @@ public class Main : MonoBehaviour
         }
         else
         {
-            EventManager.Section.SetSection(SectionTypes.Intro);            
+            EventManager.Section.SetSection(SectionTypes.Intro);
         }
     }
 
@@ -60,12 +60,25 @@ public class Main : MonoBehaviour
         {
             case SectionTypes.Intro:
                 UI.Show(UITypes.Intro);
+                Utils.DelayAction(timeoutArray["intro"].AsInt, () =>
+                {
+                    EventManager.Section.SetSection(SectionTypes.Ranking);
+                });
+                break;
+            case SectionTypes.Ranking:
+                Debug.Log("SHOW RANKING");
+                UI.Show(UITypes.Ranking);
+                Utils.DelayAction(timeoutArray["ranking"].AsInt, () =>
+                {
+                    EventManager.Section.SetSection(SectionTypes.HowToPlay);
+                });
                 break;
             case SectionTypes.HowToPlay:
                 UI.Show(UITypes.HowToPlay);
                 Utils.DelayAction(timeoutArray["howtoplay"].AsInt, () =>
                 {
-                    EventManager.Section.SetSection(SectionTypes.Game);
+                    // EventManager.Section.SetSection(SectionTypes.Game);
+                    EventManager.Section.SetSection(SectionTypes.Intro); // FIX THIS
                 });
                 break;
             case SectionTypes.Game:
@@ -76,12 +89,33 @@ public class Main : MonoBehaviour
                 UI.Show(UITypes.FinalScore);
                 Utils.DelayAction(timeoutArray["finalscore"].AsInt, () =>
                 {
+                    EventManager.Section.SetSection(SectionTypes.QRCode);
+                });
+                break;
+            case SectionTypes.QRCode:
+                UI.Show(UITypes.QRCode);
+                Utils.DelayAction(timeoutArray["qrcode"].AsInt, () =>
+                {
+                    EventManager.Section.SetSection(SectionTypes.Replay);
+                });
+                break;
+            case SectionTypes.Replay:
+                UI.Show(UITypes.Replay);
+                Utils.DelayAction(timeoutArray["replay"].AsInt, () =>
+                {
                     EventManager.Section.SetSection(SectionTypes.Gameover);
                 });
                 break;
             case SectionTypes.Gameover:
                 UI.Show(UITypes.Gameover);
                 Utils.DelayAction(timeoutArray["gameover"].AsInt, () =>
+                {
+                    EventManager.Section.SetSection(SectionTypes.Schedule);
+                });
+                break;
+            case SectionTypes.Schedule:
+                UI.Show(UITypes.Schedule);
+                Utils.DelayAction(timeoutArray["schedule"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.Intro);
                 });

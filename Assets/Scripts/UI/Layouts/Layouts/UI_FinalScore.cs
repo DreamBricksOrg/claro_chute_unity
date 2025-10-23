@@ -7,23 +7,24 @@ using System.Linq;
 
 public class UI_FinalScore : UI
 {
-    public Button btnConfirm;
     public TMP_Text fieldScore;
 
     internal override void Awake()
     {
         base.Awake();
-        btnConfirm.onClick.AddListener(() =>
-        {
-            EventManager.Section.SetSection(SectionTypes.Intro);
-        });
     }
 
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
-        var maxShootSpeed = GameRoundController.Instance.gameScoreList.Max(x => x.speed);
-        ShowShootSpeed(maxShootSpeed);
+        try
+        {
+            var maxShootSpeed = GameRoundController.Instance.gameScoreList.Max(x => x.speed);
+            ShowShootSpeed(maxShootSpeed);
+        }
+        catch (Exception)
+        {
+        }
         // EventManager.Log.SetLog(LogTypeInfo.INFO, "Game Score: " + GameRoundController.Instance.CurrentGameScore.ToString());
         // EventManager.Log.SetLog(LogTypeInfo.GAME_END);
     }

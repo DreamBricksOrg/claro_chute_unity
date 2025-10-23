@@ -3,14 +3,22 @@
         "baseUrl": "https://clarotvboxchute.ngrok.app"
     },
     "timeout": {
-        "howtoplay": 1,
-        "finalscore": 2,
-        "gameover": 2
+        "intro": 5,
+        "ranking": 2,
+        "howtoplay": 2,
+        "finalscore": 5,
+        "qrcode": 5,
+        "gameover": 5,
+        "replay": 5,
+        "schedule": 5
     },
     "settings":{
         "bgmVolume": 80,
         "sfxVolume": 100,
         "bgsVolume": 20
+    },
+    "info":{
+        "schedule": "10h às 22h"
     },
     "game":{
         "roundCount": 10,

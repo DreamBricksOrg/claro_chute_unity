@@ -2,10 +2,8 @@
 using Kasulo.Animations.UI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
-using Unity.Burst.Intrinsics;
-using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class UI_GameHUD : UI
 {
@@ -13,7 +11,8 @@ public class UI_GameHUD : UI
     public TMP_Text fieldGameScore;
     public TMP_Text fieldGameTime;
     public TMP_Text fieldGameShootSpeed;
-    public UIAnimationModule uIAnimationModule;
+    // public UIAnimationModule uIAnimationModule;
+    public Toggle[] toggleList;
     public UIAnimationModule uiAnimSpeed;
 
     void OnEnable()
@@ -50,25 +49,25 @@ public class UI_GameHUD : UI
 
     void ApplySpeedText(float speed)
     {
-        fieldGameShootSpeed.text = speed.ToString("0") + " <size=60%>km/h</size>";        
+        fieldGameShootSpeed.text = speed.ToString("0") + "<size=40%>km/h</size>";
     }
 
-    internal override void Start()
-    {
-        uIAnimationModule.gameObject.SetActive(false);
-        uIAnimationModule.Out();
-    }
+    // internal override void Start()
+    // {
+    //     uIAnimationModule.gameObject.SetActive(false);
+    //     uIAnimationModule.Out();
+    // }
 
     private void OnGameStart()
     {
-        uIAnimationModule.gameObject.SetActive(false);
-        uIAnimationModule.Out();
+        // uIAnimationModule.gameObject.SetActive(false);
+        // uIAnimationModule.Out();
     }
 
     private void OnGameEnd()
     {
-        uIAnimationModule.gameObject.SetActive(true);
-        uIAnimationModule.In();
+        // uIAnimationModule.gameObject.SetActive(true);
+        // uIAnimationModule.In();
     }
 
     private void OnGameTimeChange(float time)

@@ -1,19 +1,17 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_Schedule : UI
 {
-	public Button btnConfirm;
+    public TMP_Text fieldSchedule;
 
-	internal override void Awake()
+	internal override void Start()
 	{
-		base.Awake();
-		btnConfirm.onClick.AddListener(() =>
-		{
-			// AudioController.PlaySFX(AudioTypes.SFX_uiClick);
-			EventManager.Section.SetSection(SectionTypes.HowToPlay);
-		});
+		base.Start();
+        var infoData = Config.Instance.configData["info"];
+		fieldSchedule.text =  infoData["schedule"].Value;
 	}
 
 }
