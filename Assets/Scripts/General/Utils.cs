@@ -10,14 +10,46 @@ public static class Utils
 
     public static void DelayAction(float delayTime, Action callback)
     {
-        DelayActionAsync(delayTime, callback);
+        // backward-compatible: fire-and-forget, returned CTS ignored
+        DelayActionCancelable(delayTime, callback);
     }
 
-    private static async void DelayActionAsync(float delayTime, Action callback)
+    // New API: returns a CancellationTokenSource so callers can cancel the pending action
+    public static CancellationTokenSource DelayActionCancelable(float delayTime, Action callback)
     {
-        int delayMilliseconds = (int)(delayTime * 1000);
-        await Task.Delay(delayMilliseconds);
-        callback?.Invoke();
+        var cts = new CancellationTokenSource();
+        // intentionally not awaited; we want fire-and-forget behavior
+        _ = DelayActionAsync(delayTime, callback, cts.Token);
+        return cts;
+    }
+
+    private static async Task DelayActionAsync(float delayTime, Action callback, CancellationToken token)
+    {
+        try
+        {
+            int delayMilliseconds = (int)(delayTime * 1000);
+            await Task.Delay(delayMilliseconds, token);
+            if (!token.IsCancellationRequested)
+                callback?.Invoke();
+        }
+        catch (OperationCanceledException)
+        {
+            // canceled - nothing to do
+        }
+    }
+
+    // Helper to cancel and dispose a CancellationTokenSource returned by DelayActionCancelable
+    public static void CancelDelay(CancellationTokenSource cts)
+    {
+        if (cts == null) return;
+        try
+        {
+            if (!cts.IsCancellationRequested) cts.Cancel();
+        }
+        finally
+        {
+            cts.Dispose();
+        }
     }
 
     public static Color HexToColor(string hex)

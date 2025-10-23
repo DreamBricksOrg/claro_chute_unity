@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,10 +10,13 @@ public class Widget_HandTracking : MonoBehaviour
 {
     public Image cooldownImage;
     public CanvasGroup canvasGroup;
+    public RectTransform playButtonRect;
     public float cooldownDuration = 3f;
     public bool isWorking = true;
     bool isFreeHovering = true;
     Button activeButton;
+    bool isHoveringOverButton = false;
+
 
     float _currentCooldownValue = 0f;
     float CurrentCooldownValue
@@ -21,7 +25,16 @@ public class Widget_HandTracking : MonoBehaviour
         set
         {
             _currentCooldownValue = Mathf.Clamp(value, 0f, 1f);
-            rectTransform.localScale = Vector3.one + (Vector3.one * _currentCooldownValue);
+            if (_currentCooldownValue > 0f)
+            {
+                isHoveringOverButton = true;
+                playButtonRect.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+            }
+            else
+            {
+                isHoveringOverButton = false;
+                playButtonRect.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutBack);
+            }
             UpdateCooldownImage();
         }
     }
@@ -37,6 +50,7 @@ public class Widget_HandTracking : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
+        CurrentCooldownValue = 0f;
     }
 
     void OnEnable()
@@ -56,9 +70,10 @@ public class Widget_HandTracking : MonoBehaviour
         switch (sectionType)
         {
             case SectionTypes.Intro:
+            case SectionTypes.Ranking:
+            case SectionTypes.HowToPlay:
                 isWorking = true;
                 isFreeHovering = true;
-                CurrentCooldownValue = 0f;
                 UpdateCooldownImage();
                 canvasGroup.alpha = 1f;
                 break;

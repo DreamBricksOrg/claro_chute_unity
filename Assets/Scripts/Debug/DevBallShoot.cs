@@ -5,9 +5,8 @@ using UnityEngine.InputSystem;
 
 public class DevBallShoot : MonoBehaviour, InputControls.IGameActions
 {
-
     private InputControls inputControls;
-    public GameObject ballPrefab;
+    public BallController ballController;
 
     private void Awake()
     {
@@ -28,19 +27,14 @@ public class DevBallShoot : MonoBehaviour, InputControls.IGameActions
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        // if (context.performed)
-        // {
-        //     ResetBall();
-        //     var direction = transform.forward;
-        //     var upRotation = Quaternion.AngleAxis(-20f, Vector3.right);
-        //     var adjustedDirection = upRotation * direction;
-        //     ballPrefab.GetComponent<Rigidbody>().velocity = adjustedDirection * 10f;
-        // }
-    }
-
-    void ResetBall()
-    {
-        ballPrefab.transform.localPosition = new Vector3(0, 0, 0);
+        Debug.Log(">>> DevBallShoot OnFire triggered.");
+        if (context.performed)
+        {
+            var direction = transform.forward;
+            var upRotation = Quaternion.AngleAxis(-20f, Vector3.right);
+            var adjustedDirection = upRotation * direction;
+            ballController.ShootBall(adjustedDirection, 2f);
+        }
     }
 
     public void OnPrintScreen(InputAction.CallbackContext context)

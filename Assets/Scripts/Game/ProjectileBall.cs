@@ -26,7 +26,7 @@ public class ProjectileBall : MonoBehaviour
     public void Play(Vector3 direction, float velocity = 1f)
     {
         AudioController.PlaySFX(AudioTypes.SFX_ballShoot);
-        EventManager.Game.ShootSpeed(velocity);
+        EventManager.Game.ShootSpeed(velocity * Config.Instance.configData["game"]["uiSpeedMultiplier"].AsFloat);
         Destroy(gameObject, Config.Instance.configData["game"]["ballLifespan"].AsInt);
         isActive = true;
         colliderComponent.enabled = true;

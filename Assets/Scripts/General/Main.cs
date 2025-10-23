@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using System.Threading;
 
 public class Main : MonoBehaviour
 {
     public static Main Instance;
-
+    CancellationTokenSource cts;
+    
     [Header("Section")]
     public SectionTypes beginSectionType = SectionTypes.Intro;
 
@@ -60,28 +62,27 @@ public class Main : MonoBehaviour
         {
             case SectionTypes.Intro:
                 UI.Show(UITypes.Intro);
-                Utils.DelayAction(timeoutArray["intro"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["intro"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.Ranking);
                 });
                 break;
             case SectionTypes.Ranking:
-                Debug.Log("SHOW RANKING");
                 UI.Show(UITypes.Ranking);
-                Utils.DelayAction(timeoutArray["ranking"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["ranking"].AsInt, () =>
                 {
                     EventManager.Section.SetSection(SectionTypes.HowToPlay);
                 });
                 break;
             case SectionTypes.HowToPlay:
                 UI.Show(UITypes.HowToPlay);
-                Utils.DelayAction(timeoutArray["howtoplay"].AsInt, () =>
+                cts = Utils.DelayActionCancelable(timeoutArray["howtoplay"].AsInt, () =>
                 {
-                    // EventManager.Section.SetSection(SectionTypes.Game);
-                    EventManager.Section.SetSection(SectionTypes.Intro); // FIX THIS
+                    EventManager.Section.SetSection(SectionTypes.Intro);
                 });
                 break;
             case SectionTypes.Game:
+                Utils.CancelDelay(cts);
                 UI.Show(UITypes.GameHUD);
                 EventManager.Game.GameStart();
                 break;

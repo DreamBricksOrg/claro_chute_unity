@@ -93,7 +93,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7564908363675484999
 RectTransform:
   m_ObjectHideFlags: 0
@@ -360,6 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownImage: {fileID: 7998175037506890428}
   canvasGroup: {fileID: 7976886853974817892}
+  playButtonRect: {fileID: 7564908363675484999}
   cooldownDuration: 1
   isWorking: 1
   isRightHand: 1
