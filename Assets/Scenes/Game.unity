@@ -717,7 +717,7 @@ MonoBehaviour:
   togglePrefab: {fileID: 2932391549623610042, guid: 1b9afaa88c5731b49ade4a4f5f5105db, type: 3}
   fadeCanvasGroup: {fileID: 16821670}
   uiAnimSpeed: {fileID: 634158863}
-  debug_disableRecord: 1
+  debug_disableRecord: 0
 --- !u!225 &78869032
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -15554,7 +15554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b598a922cab12144b1ed5ce5a3298a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beginSectionType: 40
+  beginSectionType: 10
 --- !u!1 &1362317011
 GameObject:
   m_ObjectHideFlags: 0

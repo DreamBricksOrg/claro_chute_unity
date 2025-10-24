@@ -25,7 +25,7 @@
         "showDebugFeet": false
     },
     "game":{
-        "roundCount": 10,
+        "roundCount": 3,
         "duration": 60,
         "ballPower": 2.0,
         "ballSpeedLimitRange": [1.0, 10.0],
