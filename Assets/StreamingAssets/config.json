@@ -3,14 +3,13 @@
         "baseUrl": "https://clarotvboxchute.ngrok.app"
     },
     "timeout": {
-        "intro": 8,
-        "ranking": 8,
-        "howtoplay": 8,
+        "intro": 6,
+        "ranking": 6,
+        "howtoplay": 6,
         "finalscore": 6,
         "qrcode": 60,
         "replay": 10,
-        "gameover": 5,
-        "schedule": 5
+        "gameover": 6
     },
     "settings":{
         "bgmVolume": 80,
@@ -18,8 +17,12 @@
         "bgsVolume": 20
     },
     "info":{
-        "scheduleStart": "20:20",
-        "scheduleStop": "20:19"
+        "scheduleStart": "09:00",
+        "scheduleStop": "23:00"
+    },
+    "kinect":{
+        "handTrackingSensibility": 2.0,
+        "showDebugFeet": false
     },
     "game":{
         "roundCount": 3,

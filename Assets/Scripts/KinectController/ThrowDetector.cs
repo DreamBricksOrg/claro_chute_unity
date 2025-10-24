@@ -17,6 +17,8 @@ public class ThrowDetector : MonoBehaviour
     private float lastVelocity = 0f;
     private Vector3 lastDirection = Vector3.zero;
 
+    public Renderer meshrender;
+
     // public Transform pinnedPosition;
 
     private bool isAccumulating = false;
@@ -42,6 +44,14 @@ public class ThrowDetector : MonoBehaviour
     {
         EventManager.Game.OnGameStartEvent -= OnGameStart;
         EventManager.Game.OnGameEndEvent -= OnGameEnd;
+    }
+
+    void Start()
+    {
+        if (meshrender != null)
+        {
+            meshrender.enabled = Config.Instance.configData["kinect"]["showDebugFeet"].AsBool;            
+        };
     }
 
     private void OnGameStart()

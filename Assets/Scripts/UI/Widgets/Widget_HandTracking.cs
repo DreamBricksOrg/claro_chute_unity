@@ -17,7 +17,6 @@ public class Widget_HandTracking : MonoBehaviour
     Button activeButton;
     bool isHoveringOverButton = false;
 
-
     float _currentCooldownValue = 0f;
     float CurrentCooldownValue
     {
@@ -45,6 +44,7 @@ public class Widget_HandTracking : MonoBehaviour
     public bool isRightHand = true;
     PointerEventData pointerData;
     private GameObject lastHoveredObject;
+    private float handSensibility = 1f;
 
     void Awake()
     {
@@ -63,6 +63,11 @@ public class Widget_HandTracking : MonoBehaviour
     {
         EventManager.Kinect.OnKinectHandPositionEvent -= OnKinectHandPosition;
         EventManager.Section.OnSectionEvent -= OnSection;
+    }
+
+    void Start()
+    {
+        handSensibility = Config.Instance.configData["kinect"]["handTrackingSensibility"].AsFloat;
     }
 
     private void OnSection(SectionTypes sectionType)
@@ -91,7 +96,7 @@ public class Widget_HandTracking : MonoBehaviour
     {
         if (!isWorking) return;
         if (isRightHand != isRight) return;
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(position);
+        var screenPosition = Camera.main.WorldToScreenPoint(position * handSensibility);
         if (rectTransform != null && canvas != null)
         {
             Vector2 localPoint;

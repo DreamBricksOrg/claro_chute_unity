@@ -2,11 +2,15 @@
 using DG.Tweening;
 using System.Collections;
 using System.Threading;
+using System;
+using System.Globalization;
 
 public class Main : MonoBehaviour
 {
     public static Main Instance;
     CancellationTokenSource cts;
+    int scheduleState = -1;
+    Coroutine scheduleCoroutine;
 
     [Header("Section")]
     public SectionTypes beginSectionType = SectionTypes.Intro;
@@ -15,12 +19,30 @@ public class Main : MonoBehaviour
     {
         Application.lowMemory += OnLowMemory;
         EventManager.Section.OnSectionEvent += OnSection;
+        EventManager.CoreSystem.OnCoreSystemStateEvent += OnCoreSystemState;
     }
 
     void OnDisable()
     {
         Application.lowMemory -= OnLowMemory;
         EventManager.Section.OnSectionEvent -= OnSection;
+        EventManager.CoreSystem.OnCoreSystemStateEvent -= OnCoreSystemState;
+    }
+
+    private void OnCoreSystemState(bool isCoreSystemWorking)
+    {
+        scheduleState = isCoreSystemWorking ? 1 : 0;
+        Utils.CancelDelay(cts);
+        if (isCoreSystemWorking)
+        {
+            Debug.Log("SYSTEM ONLINE >>> GO TO INTRO");
+            EventManager.Section.SetSection(SectionTypes.Intro);
+        }
+        else
+        {
+            Debug.Log("SYSTEM OFFLINE >>> GO TO SCHEDULE");
+            EventManager.Section.SetSection(SectionTypes.Schedule);
+        }
     }
 
     void Awake()
@@ -40,6 +62,9 @@ public class Main : MonoBehaviour
         {
             EventManager.Section.SetSection(SectionTypes.Intro);
         }
+
+        if (scheduleCoroutine != null) StopCoroutine(scheduleCoroutine);
+        scheduleCoroutine = StartCoroutine(CheckSystemTimeCoroutine());
     }
 
     private void OnLowMemory()
@@ -67,6 +92,7 @@ public class Main : MonoBehaviour
                 {
                     EventManager.Section.SetSection(SectionTypes.Ranking);
                 });
+                CheckSystemSchedule();
                 break;
             case SectionTypes.Ranking:
                 UI.Show(UITypes.Ranking);
@@ -82,7 +108,7 @@ public class Main : MonoBehaviour
                     EventManager.Section.SetSection(SectionTypes.Intro);
                 });
                 break;
-            case SectionTypes.Game:                
+            case SectionTypes.Game:
                 UI.Show(UITypes.GameHUD);
                 EventManager.Game.GameStart();
                 break;
@@ -117,6 +143,38 @@ public class Main : MonoBehaviour
             case SectionTypes.Schedule:
                 UI.Show(UITypes.Schedule);
                 break;
+        }
+    }
+
+    void CheckSystemSchedule()
+    {
+        var infoData = Config.Instance.configData["info"];
+        var timeStart = DateTime.ParseExact(infoData["scheduleStart"].Value, "HH:mm", CultureInfo.InvariantCulture);
+        var timeStop = DateTime.ParseExact(infoData["scheduleStop"].Value, "HH:mm", CultureInfo.InvariantCulture);
+
+        DateTime currentTime = DateTime.Now;
+        TimeSpan currentTimeOfDay = currentTime.TimeOfDay;
+        TimeSpan startTimeOfDay = timeStart.TimeOfDay;
+        TimeSpan stopTimeOfDay = timeStop.TimeOfDay;
+
+        bool isNowInScheduleTime = currentTimeOfDay >= startTimeOfDay && currentTimeOfDay <= stopTimeOfDay;
+
+        if (isNowInScheduleTime && scheduleState <= 0)
+        {
+            EventManager.CoreSystem.SetState(true);
+        }
+        else if (!isNowInScheduleTime && (scheduleState == -1 || scheduleState == 1))
+        {
+            EventManager.CoreSystem.SetState(false);
+        }
+    }
+    
+    IEnumerator CheckSystemTimeCoroutine()
+    {
+        while (true)
+        {
+            if(scheduleState != 1) CheckSystemSchedule();
+            yield return new WaitForSeconds(2f);
         }
     }
 

@@ -12,14 +12,13 @@ public class UI_GameHUD : UI
     public TMP_Text fieldGameScore;
     public TMP_Text fieldGameTime;
     public TMP_Text fieldGameShootSpeed;
-    // public UIAnimationModule uIAnimationModule;
     public Transform toggleRoot;
     public GameObject togglePrefab;
     public CanvasGroup fadeCanvasGroup;
     private Toggle[] toggleList;
     public UIAnimationModule uiAnimSpeed;
-
     bool isRecording = false;
+    public bool debug_disableRecord = false;
 
     void OnEnable()
     {
@@ -58,6 +57,7 @@ public class UI_GameHUD : UI
 
         if (GameRoundController.Instance.gameScoreList.Count == 1)
         {
+            if(debug_disableRecord && Application.isEditor) return;
             StartRecording();
         }
     }
