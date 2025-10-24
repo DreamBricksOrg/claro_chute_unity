@@ -12,7 +12,7 @@ public class UI_Intro : UI
 		btnConfirm.onClick.AddListener(() =>
 		{
 			// AudioController.PlaySFX(AudioTypes.SFX_uiClick);
-			EventManager.Section.SetSection(SectionTypes.Ranking);
+			EventManager.Section.SetSection(SectionTypes.Game);
 		});
 	}
 

@@ -103,7 +103,7 @@ public class GameRoundController : MonoBehaviour
 
     private void OnGameEnd()
     {
-        Utils.DelayAction(4f, () =>
+        Utils.DelayAction(1f, () =>
         {
             EventManager.Section.SetSection(SectionTypes.FinalScore);
         });
