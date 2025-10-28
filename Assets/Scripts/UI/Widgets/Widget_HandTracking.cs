@@ -88,6 +88,7 @@ public class Widget_HandTracking : MonoBehaviour
                 CurrentCooldownValue = 0f;
                 UpdateCooldownImage();
                 canvasGroup.alpha = 0f;
+                rectTransform.anchoredPosition = new Vector2(-1000, -1000);
                 break;
         }
     }

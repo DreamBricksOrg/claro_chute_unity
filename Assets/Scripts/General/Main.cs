@@ -67,7 +67,7 @@ public class Main : MonoBehaviour
         if (scheduleCoroutine != null) StopCoroutine(scheduleCoroutine);
         scheduleCoroutine = StartCoroutine(CheckSystemTimeCoroutine());
 
-        LogManager.SendLog("System Started");
+        LogManager.SendLog("TOTEM_START");
     }
 
     private void OnLowMemory()
@@ -87,10 +87,10 @@ public class Main : MonoBehaviour
         var timeoutArray = Config.Instance.configData["timeout"];
         UI.HideAll();
         Utils.CancelDelay(cts);
-        LogManager.SendLog("Section: " + sectionType.ToString());
         switch (sectionType)
         {
             case SectionTypes.Intro:
+                LogManager.SendLog("TOTEM_INICIO");
                 UI.Show(UITypes.Intro);
                 cts = Utils.DelayActionCancelable(timeoutArray["intro"].AsInt, () =>
                 {
@@ -99,6 +99,7 @@ public class Main : MonoBehaviour
                 CheckSystemSchedule();
                 break;
             case SectionTypes.Ranking:
+                LogManager.SendLog("TOTEM_RANKING");
                 UI.Show(UITypes.Ranking);
                 cts = Utils.DelayActionCancelable(timeoutArray["ranking"].AsInt, () =>
                 {
@@ -106,6 +107,7 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.HowToPlay:
+                LogManager.SendLog("TOTEM_COMO_JOGAR");
                 UI.Show(UITypes.HowToPlay);
                 cts = Utils.DelayActionCancelable(timeoutArray["howtoplay"].AsInt, () =>
                 {
@@ -113,10 +115,12 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.Game:
+                LogManager.SendLog("TOTEM_JOGO");
                 UI.Show(UITypes.GameHUD);
                 EventManager.Game.GameStart();
                 break;
             case SectionTypes.FinalScore:
+                LogManager.SendLog("TOTEM_PONTUACAO_FINAL");
                 UI.Show(UITypes.FinalScore);
                 cts = Utils.DelayActionCancelable(timeoutArray["finalscore"].AsInt, () =>
                 {
@@ -124,6 +128,7 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.QRCode:
+                LogManager.SendLog("TOTEM_QRCODE");
                 UI.Show(UITypes.QRCode);
                 // cts = Utils.DelayActionCancelable(timeoutArray["qrcode"].AsInt, () =>
                 // {
@@ -131,6 +136,7 @@ public class Main : MonoBehaviour
                 // });
                 break;
             case SectionTypes.Replay:
+                LogManager.SendLog("TOTEM_REPLAY");
                 UI.Show(UITypes.Replay);
                 // cts = Utils.DelayActionCancelable(timeoutArray["replay"].AsInt, () =>
                 // {
@@ -138,6 +144,7 @@ public class Main : MonoBehaviour
                 // });
                 break;
             case SectionTypes.Gameover:
+                LogManager.SendLog("TOTEM_FIM_DE_JOGO");
                 UI.Show(UITypes.Gameover);
                 cts = Utils.DelayActionCancelable(timeoutArray["gameover"].AsInt, () =>
                 {
@@ -145,6 +152,7 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.Schedule:
+                LogManager.SendLog("TOTEM_AGENDA");
                 UI.Show(UITypes.Schedule);
                 break;
         }

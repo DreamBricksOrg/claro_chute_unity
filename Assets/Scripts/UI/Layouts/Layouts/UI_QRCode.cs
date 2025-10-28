@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,8 +8,9 @@ public class UI_QRCode : UI
 {
     [Header("QR Code UI")]
     public RawImage qrCodeImage;
-
     private Texture2D currentQRTexture;
+    private bool videoIsProcessed = false;
+    private int currentTimeout = 0;
 
     internal override void Start()
     {
@@ -35,6 +37,13 @@ public class UI_QRCode : UI
 
         DisposeCurrentTexture();
 
+        videoIsProcessed = false;
+
+        currentTimeout = Config.Instance.configData["timeout"]["qrcode"].AsInt;;
+        InvokeRepeating(nameof(CheckVideoProcessed), 1f, 1f);
+
+        // esse timout devera mudar de secao porem devera garantir que o 
+
         API.Request("/api/getqrcode",
             onSuccess: (result) =>
             {
@@ -56,11 +65,13 @@ public class UI_QRCode : UI
                 }
                 catch (Exception e)
                 {
+				    EventManager.Section.SetSection(SectionTypes.Gameover);
                     Debug.LogError($"QR Parse Error: {e}");
                 }
             },
             onError: (error) =>
             {
+				EventManager.Section.SetSection(SectionTypes.Gameover);
                 Debug.LogError("API Error: " + error);
             },
             API.APIMethod.POST,
@@ -76,10 +87,57 @@ public class UI_QRCode : UI
 
     private void OnVideoReplayProcess()
     {
+        API.Request("/api/process-video/" + GameRoundController.Instance.playerId,
+            onSuccess: (result) =>
+            {
+                var jsonData = JSON.Parse(result);
+                Debug.Log("<<Video Generation Response>>" + jsonData.ToString());
+
+                // Loading
+                EventManager.VideoReplay.VideoReplayCompleted(jsonData["video"]["download_url"].Value);
+
+                // {
+                //     "status": "success",
+                //     "player": {
+                //         "id": "180c5dbf-5386-49ae-97c0-9306a96716ea",
+                //         "score": 201,
+                //         "position": 7,
+                //         "created_at": "2025-10-23T21:36:08.592000"
+                //     },
+                //     "video": {
+                //         "original_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox.mp4",
+                //         "processed_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4",
+                //         "path": "/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
+                //         "download_url": "https://clarotvboxchute.ngrok.app/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
+                //         "processed": true,
+                //         "processing_time": 3.404806137084961,
+                //         "output_file": "C:\\Users\\db\\Documents\\db\\prj\\claro_tvbox\\claro_tvbox_server\\app\\recordings\\180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4"
+                //     },
+                //     "message": "Vídeo processado com sucesso com labels aplicados"
+                // }
+
+            },
+            onError: (error) =>
+            {
+                EventManager.Section.SetSection(SectionTypes.Gameover);
+                Debug.LogError("API Error: " + error);
+            }
+        );
+    }
+    
+    void CheckVideoProcessed()
+    {
+        currentTimeout--;
+        if (videoIsProcessed && currentTimeout <= 0)
+        {
+            EventManager.Section.SetSection(SectionTypes.Replay);
+        }
+        CancelInvoke();
     }
 
     private void OnVideoReplayCompleted(string url)
     {
+        videoIsProcessed = true;        
     }
 
     private void DisposeCurrentTexture()
