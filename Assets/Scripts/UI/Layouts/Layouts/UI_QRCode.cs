@@ -9,7 +9,6 @@ public class UI_QRCode : UI
     public RawImage qrCodeImage;
 
     private Texture2D currentQRTexture;
-    private bool isDestroyed = false;
 
     internal override void Start()
     {
@@ -23,7 +22,6 @@ public class UI_QRCode : UI
         base.OnDestroy();
         EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
         EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
-        isDestroyed = true;
         DisposeCurrentTexture();
         base.OnDestroy();
     }
@@ -31,7 +29,6 @@ public class UI_QRCode : UI
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
-        isDestroyed = false;
 
         var jsonData = new JSONObject();
         jsonData["player_id"] = GameRoundController.Instance.playerId;
@@ -41,12 +38,8 @@ public class UI_QRCode : UI
         API.Request("/api/getqrcode",
             onSuccess: (result) =>
             {
-                if (isDestroyed) return;
                 try
                 {
-                    // Process Video
-                    EventManager.VideoReplay.VideoReplayProcess();
-
                     var response = JSON.Parse(result);
                     string base64 = response["qr_code"].Value;
 
@@ -57,6 +50,9 @@ public class UI_QRCode : UI
                         currentQRTexture = newTexture;
                         qrCodeImage.texture = currentQRTexture;
                     }
+
+                    // Process Video
+                    EventManager.VideoReplay.VideoReplayProcess();
                 }
                 catch (Exception e)
                 {
@@ -65,8 +61,7 @@ public class UI_QRCode : UI
             },
             onError: (error) =>
             {
-                if (!isDestroyed)
-                    Debug.LogError("API Error: " + error);
+                Debug.LogError("API Error: " + error);
             },
             API.APIMethod.POST,
             jsonData.ToString()

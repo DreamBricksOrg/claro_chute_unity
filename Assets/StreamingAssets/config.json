@@ -17,7 +17,7 @@
         "bgsVolume": 20
     },
     "info":{
-        "scheduleStart": "09:00",
+        "scheduleStart": "08:00",
         "scheduleStop": "23:00"
     },
     "kinect":{

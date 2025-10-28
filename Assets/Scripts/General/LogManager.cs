@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using SimpleJSON;
 
 public static class LogManager
 {
@@ -24,7 +25,7 @@ public static class LogManager
 
     public static void Init()
     {
-        Debug.Log("Log Directory >>> " + logFilePath);
+        // Debug.Log("Log Directory >>> " + logFilePath);
     }
 
     private static void HandleLogEvent(LogTypeInfo logType, string logText)
@@ -64,6 +65,30 @@ public static class LogManager
         {
             File.Delete(logFilePath);
         }
+    }
+
+    public static void SendLog(string message)
+    {
+        var jsonData = new JSONObject();
+        jsonData["message"] = message;
+        jsonData["level"] = "INFO";
+        jsonData["tags"] = JSON.Parse("[\"totem\"]");
+        jsonData["request_id"] = "";
+
+        Debug.Log("Sending log: " + jsonData.ToString());
+
+        API.Request("/api/log",
+            onSuccess: (result) =>
+            {
+                Debug.Log("Log sent successfully: " + result);
+            },
+            onError: (error) =>
+            {
+                Debug.LogError("API Error: " + error);
+            },
+            API.APIMethod.POST,
+            jsonData.ToString()
+        );
     }
 }
 

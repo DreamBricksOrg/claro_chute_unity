@@ -16,6 +16,8 @@ public class UI_Replay : UI
 		base.Start();
 		EventManager.VideoReplay.OnVideoReplayProcessEvent += OnVideoReplayProcess;
 		EventManager.VideoReplay.OnVideoReplayCompletedEvent += OnVideoReplayCompleted;
+		videoPlayer.prepareCompleted += OnVideoPrepared;
+		videoPlayer.loopPointReached += OnVideoEnd;
 	}
 
 	internal override void OnDestroy()
@@ -23,6 +25,8 @@ public class UI_Replay : UI
 		base.OnDestroy();
 		EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
 		EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
+		videoPlayer.prepareCompleted -= OnVideoPrepared;
+		videoPlayer.loopPointReached -= OnVideoEnd;
 	}
 
 	private void OnVideoReplayProcess()
@@ -34,12 +38,10 @@ public class UI_Replay : UI
 				Debug.Log("<<Video Generation Response>>" + jsonData.ToString());
 
 				// Loading
-
 				EventManager.VideoReplay.VideoReplayCompleted(jsonData["video"]["download_url"].Value);
-        		EventManager.Section.SetSection(SectionTypes.Replay);
+				EventManager.Section.SetSection(SectionTypes.Replay);
 
-
-				//                 {
+				// {
 				//     "status": "success",
 				//     "player": {
 				//         "id": "180c5dbf-5386-49ae-97c0-9306a96716ea",
@@ -62,7 +64,7 @@ public class UI_Replay : UI
 			},
 			onError: (error) =>
 			{
-        		EventManager.Section.SetSection(SectionTypes.Gameover);
+				EventManager.Section.SetSection(SectionTypes.Gameover);
 				Debug.LogError("API Error: " + error);
 			}
 		);
@@ -72,13 +74,17 @@ public class UI_Replay : UI
 	{
 		Debug.Log("<<Playing Replay Video>>" + url);
 		videoPlayer.url = url;
-		// videoPlayer.loopPointReached += OnVideoEnd;
-		videoPlayer.Play();
+		videoPlayer.Prepare();
+	}
+
+	private void OnVideoPrepared(VideoPlayer source)
+	{
+		source.Play();
 	}
 
 	private void OnVideoEnd(VideoPlayer source)
 	{
-
+		EventManager.Section.SetSection(SectionTypes.Gameover);
 	}
 
 }

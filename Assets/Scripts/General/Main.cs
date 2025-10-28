@@ -49,6 +49,7 @@ public class Main : MonoBehaviour
     {
         Instance = this;
         DOTween.SetTweensCapacity(5000, 20);
+        LogManager.Init();
     }
 
     IEnumerator Start()
@@ -65,6 +66,8 @@ public class Main : MonoBehaviour
 
         if (scheduleCoroutine != null) StopCoroutine(scheduleCoroutine);
         scheduleCoroutine = StartCoroutine(CheckSystemTimeCoroutine());
+
+        LogManager.SendLog("System Started");
     }
 
     private void OnLowMemory()
@@ -84,6 +87,7 @@ public class Main : MonoBehaviour
         var timeoutArray = Config.Instance.configData["timeout"];
         UI.HideAll();
         Utils.CancelDelay(cts);
+        LogManager.SendLog("Section: " + sectionType.ToString());
         switch (sectionType)
         {
             case SectionTypes.Intro:
@@ -128,10 +132,10 @@ public class Main : MonoBehaviour
                 break;
             case SectionTypes.Replay:
                 UI.Show(UITypes.Replay);
-                cts = Utils.DelayActionCancelable(timeoutArray["replay"].AsInt, () =>
-                {
-                    EventManager.Section.SetSection(SectionTypes.Gameover);
-                });
+                // cts = Utils.DelayActionCancelable(timeoutArray["replay"].AsInt, () =>
+                // {
+                //     EventManager.Section.SetSection(SectionTypes.Gameover);
+                // });
                 break;
             case SectionTypes.Gameover:
                 UI.Show(UITypes.Gameover);
@@ -168,14 +172,15 @@ public class Main : MonoBehaviour
             EventManager.CoreSystem.SetState(false);
         }
     }
-    
+
     IEnumerator CheckSystemTimeCoroutine()
     {
         while (true)
         {
-            if(scheduleState != 1) CheckSystemSchedule();
+            if (scheduleState != 1) CheckSystemSchedule();
             yield return new WaitForSeconds(2f);
         }
-    }
+    }   
+    
 
 }

@@ -46,15 +46,11 @@ public class UI_GameHUD : UI
     {
         base.OnShow(data, callback);
         isRecording = false;
-        // Invoke("StopRecording", 1f);
     }
 
     private void OnNextRound()
     {
         FadeInOut();
-
-        // Reset Goalkeeper
-
         if (GameRoundController.Instance.gameScoreList.Count == 1)
         {
             if(debug_disableRecord && Application.isEditor) return;
@@ -123,8 +119,8 @@ public class UI_GameHUD : UI
         fadeCanvasGroup.DOKill();
         var sequence = DOTween.Sequence();
         fadeCanvasGroup.alpha = 0f;
-        sequence.Append(fadeCanvasGroup.DOFade(1f, 0.5f))  // Fade in
-               .Append(fadeCanvasGroup.DOFade(0f, 0.5f));  // Fade out
+        sequence.Append(fadeCanvasGroup.DOFade(1f, 0.5f))
+               .Append(fadeCanvasGroup.DOFade(0f, 0.5f));
     }
 
     // internal override void Start()
