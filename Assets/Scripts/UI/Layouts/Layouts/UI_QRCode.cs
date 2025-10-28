@@ -42,7 +42,6 @@ public class UI_QRCode : UI
         currentTimeout = Config.Instance.configData["timeout"]["qrcode"].AsInt;;
         InvokeRepeating(nameof(CheckVideoProcessed), 1f, 1f);
 
-        // esse timout devera mudar de secao porem devera garantir que o 
 
         API.Request("/api/getqrcode",
             onSuccess: (result) =>
@@ -131,13 +130,13 @@ public class UI_QRCode : UI
         if (videoIsProcessed && currentTimeout <= 0)
         {
             EventManager.Section.SetSection(SectionTypes.Replay);
+            CancelInvoke();
         }
-        CancelInvoke();
     }
 
     private void OnVideoReplayCompleted(string url)
     {
-        videoIsProcessed = true;        
+        videoIsProcessed = true;
     }
 
     private void DisposeCurrentTexture()

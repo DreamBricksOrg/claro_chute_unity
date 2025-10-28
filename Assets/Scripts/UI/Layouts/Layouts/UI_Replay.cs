@@ -71,17 +71,16 @@ public class UI_Replay : UI
 		Debug.Log("<<Playing Replay Video>>" + url);
 		videoPlayer.url = url;
 		videoPlayer.loopPointReached -= OnVideoEnd;
+		videoPlayer.prepareCompleted -= OnVideoPrepared;
 		videoPlayer.loopPointReached += OnVideoEnd;
-		// videoPlayer.prepareCompleted -= OnVideoPrepared;
-		// videoPlayer.prepareCompleted += OnVideoPrepared;
-		// videoPlayer.Prepare();
-		videoPlayer.Play();
+		videoPlayer.prepareCompleted += OnVideoPrepared;
+		videoPlayer.Prepare();
 	}
 
 	private void OnVideoPrepared(VideoPlayer source)
 	{
 		Debug.Log("<<PLAY>>");
-		source.Play();
+		videoPlayer.Play();
 	}
 
 	private void OnVideoEnd(VideoPlayer source)
