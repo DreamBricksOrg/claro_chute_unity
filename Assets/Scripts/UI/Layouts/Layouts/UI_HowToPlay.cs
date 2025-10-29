@@ -12,7 +12,7 @@ public class UI_HowToPlay : UI
 		btnConfirm.onClick.AddListener(() =>
 		{
 			// AudioController.PlaySFX(AudioTypes.SFX_uiClick);
-			EventManager.Section.SetSection(SectionTypes.Game);
+			EventManager.Section.SetSection(SectionTypes.Terms);
 		});
 	}
 

@@ -77,20 +77,22 @@ public class Widget_HandTracking : MonoBehaviour
             case SectionTypes.Intro:
             case SectionTypes.Ranking:
             case SectionTypes.HowToPlay:
-                isWorking = true;
-                isFreeHovering = true;
-                UpdateCooldownImage();
-                canvasGroup.alpha = 1f;
+            case SectionTypes.Terms:
+                SetHandShow(true);
                 break;
             default:
-                isWorking = false;
-                isFreeHovering = false;
-                CurrentCooldownValue = 0f;
-                UpdateCooldownImage();
-                canvasGroup.alpha = 0f;
-                rectTransform.anchoredPosition = new Vector2(-1000, -1000);
+                SetHandShow(false);
                 break;
         }
+    }
+
+    void SetHandShow(bool flag)
+    {
+        isWorking = flag;
+        isFreeHovering = flag;
+        UpdateCooldownImage();
+        canvasGroup.alpha =  flag ? 1f : 0f;
+        rectTransform.anchoredPosition = new Vector2(-1000, -1000);
     }
 
     private void OnKinectHandPosition(bool isRight, Vector3 position)

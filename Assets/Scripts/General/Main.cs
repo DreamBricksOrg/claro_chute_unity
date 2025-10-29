@@ -130,18 +130,14 @@ public class Main : MonoBehaviour
             case SectionTypes.QRCode:
                 LogManager.SendLog("TOTEM_QRCODE");
                 UI.Show(UITypes.QRCode);
-                // cts = Utils.DelayActionCancelable(timeoutArray["qrcode"].AsInt, () =>
-                // {
-                //     EventManager.Section.SetSection(SectionTypes.Gameover);
-                // });
                 break;
             case SectionTypes.Replay:
                 LogManager.SendLog("TOTEM_REPLAY");
                 UI.Show(UITypes.Replay);
-                // cts = Utils.DelayActionCancelable(timeoutArray["replay"].AsInt, () =>
-                // {
-                //     EventManager.Section.SetSection(SectionTypes.Gameover);
-                // });
+                break;
+            case SectionTypes.Terms:
+                LogManager.SendLog("TOTEM_TERMS");
+                UI.Show(UITypes.Terms);
                 break;
             case SectionTypes.Gameover:
                 LogManager.SendLog("TOTEM_FIM_DE_JOGO");

@@ -177,6 +177,7 @@ public enum UITypes
     Intro = 10,
     Ranking = 11,
     HowToPlay = 20,
+    Terms = 21,
     GameHUD = 40,
     FinalScore = 70,
     QRCode = 71,

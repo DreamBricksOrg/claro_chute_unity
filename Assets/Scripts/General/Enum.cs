@@ -6,6 +6,7 @@ public enum SectionTypes
     Intro = 10,
     Ranking = 11,
     HowToPlay = 20,
+    Terms = 21,
     Game = 40,
     FinalScore = 70,
     QRCode = 71,
