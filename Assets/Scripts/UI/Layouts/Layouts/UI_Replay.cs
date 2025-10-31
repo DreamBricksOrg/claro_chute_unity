@@ -7,64 +7,34 @@ using UnityEngine.Video;
 
 public class UI_Replay : UI
 {
-	public TMP_Text fieldScore;
-	public TMP_Text fieldRanking;
 	public VideoPlayer videoPlayer;
+	public CanvasGroup videoCanvasGroup;
+	public RectTransform loadingSpinner;
 
 	internal override void Start()
 	{
 		base.Start();
-		// EventManager.VideoReplay.OnVideoReplayProcessEvent += OnVideoReplayProcess;
 		EventManager.VideoReplay.OnVideoReplayCompletedEvent += OnVideoReplayCompleted;
+		videoCanvasGroup.alpha = 0;
 	}
 
 	internal override void OnDestroy()
 	{
 		base.OnDestroy();
-		// EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
 		EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
 	}
 
-	// private void OnVideoReplayProcess()
-	// {
-	// 	API.Request("/api/process-video/" + GameRoundController.Instance.playerId,
-	// 		onSuccess: (result) =>
-	// 		{
-	// 			var jsonData = JSON.Parse(result);
-	// 			Debug.Log("<<Video Generation Response>>" + jsonData.ToString());
+	override internal void OnShow(object data, Action<object> callback)
+	{
+		base.OnShow(data, callback);
+		loadingSpinner.DORotate(new Vector3(0, 0, -360), 1f, RotateMode.FastBeyond360).SetLoops(-1).SetEase(Ease.Linear);
+	}
 
-	// 			// Loading
-	// 			EventManager.VideoReplay.VideoReplayCompleted(jsonData["video"]["download_url"].Value);
-	// 			EventManager.Section.SetSection(SectionTypes.Replay);
-
-	// 			// {
-	// 			//     "status": "success",
-	// 			//     "player": {
-	// 			//         "id": "180c5dbf-5386-49ae-97c0-9306a96716ea",
-	// 			//         "score": 201,
-	// 			//         "position": 7,
-	// 			//         "created_at": "2025-10-23T21:36:08.592000"
-	// 			//     },
-	// 			//     "video": {
-	// 			//         "original_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox.mp4",
-	// 			//         "processed_filename": "180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4",
-	// 			//         "path": "/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
-	// 			//         "download_url": "https://clarotvboxchute.ngrok.app/api/video/180c5dbf-5386-49ae-97c0-9306a96716ea",
-	// 			//         "processed": true,
-	// 			//         "processing_time": 3.404806137084961,
-	// 			//         "output_file": "C:\\Users\\db\\Documents\\db\\prj\\claro_tvbox\\claro_tvbox_server\\app\\recordings\\180c5dbf-5386-49ae-97c0-9306a96716ea_claro_tvbox_processed.mp4"
-	// 			//     },
-	// 			//     "message": "Vídeo processado com sucesso com labels aplicados"
-	// 			// }
-
-	// 		},
-	// 		onError: (error) =>
-	// 		{
-	// 			EventManager.Section.SetSection(SectionTypes.Gameover);
-	// 			Debug.LogError("API Error: " + error);
-	// 		}
-	// 	);
-	// }
+	override internal void OnHide(object data, Action<object> callback)
+	{
+		base.OnHide(data, callback);
+		loadingSpinner.DOKill();
+	}
 
 	private void OnVideoReplayCompleted(string url)
 	{
@@ -81,10 +51,12 @@ public class UI_Replay : UI
 	{
 		Debug.Log("<<PLAY>>");
 		videoPlayer.Play();
+		videoCanvasGroup.DOFade(1, 0.3f);
 	}
 
 	private void OnVideoEnd(VideoPlayer source)
 	{
+		videoCanvasGroup.DOFade(0, 0.3f);
 		EventManager.Section.SetSection(SectionTypes.Gameover);
 	}
 

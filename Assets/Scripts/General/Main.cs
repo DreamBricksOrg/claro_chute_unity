@@ -4,10 +4,14 @@ using System.Collections;
 using System.Threading;
 using System;
 using System.Globalization;
+using UnityEngine.InputSystem;
 
 public class Main : MonoBehaviour
 {
     public static Main Instance;
+    [Header("Input")]
+    [SerializeField] private InputActionAsset inputActionAsset;
+    public InputActionAsset InputActions => inputActionAsset;
     CancellationTokenSource cts;
     int scheduleState = -1;
     Coroutine scheduleCoroutine;
@@ -20,13 +24,34 @@ public class Main : MonoBehaviour
         Application.lowMemory += OnLowMemory;
         EventManager.Section.OnSectionEvent += OnSection;
         EventManager.CoreSystem.OnCoreSystemStateEvent += OnCoreSystemState;
+        
+        var gameActions = inputActionAsset.FindActionMap("Game");
+        gameActions.Enable();
     }
 
     void OnDisable()
     {
+        CleanupEvents();
+        DisableInputs();
+    }
+
+    void OnApplicationQuit()
+    {
+        CleanupEvents();
+        DisableInputs();
+    }
+
+    private void CleanupEvents()
+    {
         Application.lowMemory -= OnLowMemory;
         EventManager.Section.OnSectionEvent -= OnSection;
         EventManager.CoreSystem.OnCoreSystemStateEvent -= OnCoreSystemState;
+    }
+
+    private void DisableInputs()
+    {
+        var gameActions = inputActionAsset.FindActionMap("Game");
+        gameActions.Disable();
     }
 
     private void OnCoreSystemState(bool isCoreSystemWorking)
@@ -36,11 +61,13 @@ public class Main : MonoBehaviour
         if (isCoreSystemWorking)
         {
             Debug.Log("SYSTEM ONLINE >>> GO TO INTRO");
+            LogManager.SendLog("TOTEM_INICIO");
             EventManager.Section.SetSection(SectionTypes.Intro);
         }
         else
         {
             Debug.Log("SYSTEM OFFLINE >>> GO TO SCHEDULE");
+            LogManager.SendLog("TOTEM_FIM");
             EventManager.Section.SetSection(SectionTypes.Schedule);
         }
     }
@@ -50,6 +77,12 @@ public class Main : MonoBehaviour
         Instance = this;
         DOTween.SetTweensCapacity(5000, 20);
         LogManager.Init();
+
+        // Validate Input Action Asset
+        if (inputActionAsset == null)
+        {
+            Debug.LogError("Input Action Asset not assigned in Main component. Please assign it in the Inspector.");
+        }
     }
 
     IEnumerator Start()
@@ -90,7 +123,6 @@ public class Main : MonoBehaviour
         switch (sectionType)
         {
             case SectionTypes.Intro:
-                LogManager.SendLog("TOTEM_INICIO");
                 UI.Show(UITypes.Intro);
                 cts = Utils.DelayActionCancelable(timeoutArray["intro"].AsInt, () =>
                 {
@@ -99,7 +131,6 @@ public class Main : MonoBehaviour
                 CheckSystemSchedule();
                 break;
             case SectionTypes.Ranking:
-                LogManager.SendLog("TOTEM_RANKING");
                 UI.Show(UITypes.Ranking);
                 cts = Utils.DelayActionCancelable(timeoutArray["ranking"].AsInt, () =>
                 {
@@ -107,7 +138,6 @@ public class Main : MonoBehaviour
                 });
                 break;
             case SectionTypes.HowToPlay:
-                LogManager.SendLog("TOTEM_COMO_JOGAR");
                 UI.Show(UITypes.HowToPlay);
                 cts = Utils.DelayActionCancelable(timeoutArray["howtoplay"].AsInt, () =>
                 {

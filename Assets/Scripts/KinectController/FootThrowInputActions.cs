@@ -47,4 +47,8 @@ public class FootThrowInputActions : MonoBehaviour, InputControls.IGameActions
     public void OnPrintScreen(InputAction.CallbackContext context)
     {
     }
+
+    public void OnDeveloperMode(InputAction.CallbackContext context)
+    {
+    }
 }

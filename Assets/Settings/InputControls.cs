@@ -44,6 +44,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DeveloperMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3883e35-09d7-4621-8e53-83342c65302b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""action"": ""PrintScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc630796-2158-4c76-9cbb-0c5d1991701f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DeveloperMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -78,6 +98,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_Fire = m_Game.FindAction("Fire", throwIfNotFound: true);
         m_Game_PrintScreen = m_Game.FindAction("PrintScreen", throwIfNotFound: true);
+        m_Game_DeveloperMode = m_Game.FindAction("DeveloperMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -141,12 +162,14 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_Fire;
     private readonly InputAction m_Game_PrintScreen;
+    private readonly InputAction m_Game_DeveloperMode;
     public struct GameActions
     {
         private @InputControls m_Wrapper;
         public GameActions(@InputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Fire => m_Wrapper.m_Game_Fire;
         public InputAction @PrintScreen => m_Wrapper.m_Game_PrintScreen;
+        public InputAction @DeveloperMode => m_Wrapper.m_Game_DeveloperMode;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -162,6 +185,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @PrintScreen.started += instance.OnPrintScreen;
             @PrintScreen.performed += instance.OnPrintScreen;
             @PrintScreen.canceled += instance.OnPrintScreen;
+            @DeveloperMode.started += instance.OnDeveloperMode;
+            @DeveloperMode.performed += instance.OnDeveloperMode;
+            @DeveloperMode.canceled += instance.OnDeveloperMode;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -172,6 +198,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @PrintScreen.started -= instance.OnPrintScreen;
             @PrintScreen.performed -= instance.OnPrintScreen;
             @PrintScreen.canceled -= instance.OnPrintScreen;
+            @DeveloperMode.started -= instance.OnDeveloperMode;
+            @DeveloperMode.performed -= instance.OnDeveloperMode;
+            @DeveloperMode.canceled -= instance.OnDeveloperMode;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -193,5 +222,6 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     {
         void OnFire(InputAction.CallbackContext context);
         void OnPrintScreen(InputAction.CallbackContext context);
+        void OnDeveloperMode(InputAction.CallbackContext context);
     }
 }

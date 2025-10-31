@@ -3,44 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DevBallShoot : MonoBehaviour, InputControls.IGameActions
+public class DevBallShoot : MonoBehaviour
 {
-    private InputControls inputControls;
     public BallController ballController;
+    private InputAction fireAction;
 
-    private void Awake()
+    private void Start()
     {
-        inputControls = new InputControls();
+        var gameActions = Main.Instance.InputActions.FindActionMap("Game");
+        fireAction = gameActions.FindAction("Fire");
+        fireAction.performed += OnFirePerformed;
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        inputControls.Game.SetCallbacks(this);
-        inputControls.Game.Enable();
+        CleanupInputs();
     }
 
-    private void OnDisable()
+    private void OnApplicationQuit()
     {
-        inputControls.Game.Disable();
-        inputControls.Game.SetCallbacks(null);
+        CleanupInputs();
     }
 
-    public void OnFire(InputAction.CallbackContext context)
+    private void CleanupInputs()
     {
-        if (context.performed)
+        if (fireAction != null)
         {
-            var direction = transform.forward;
-            var upRotation = Quaternion.AngleAxis(-20f, Vector3.right);
-            var adjustedDirection = upRotation * direction;
-            ballController.ShootBall(adjustedDirection, 2f);
+            fireAction.performed -= OnFirePerformed;
+            fireAction = null;
         }
     }
 
-    public void OnPrintScreen(InputAction.CallbackContext context)
+    private void OnFirePerformed(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-           ScreenCapture.CaptureScreenshot("screenshot.png", 2);
-        }
+        Debug.Log("SHOOT BALL");
+        var direction = transform.forward;
+        var upRotation = Quaternion.AngleAxis(-20f, Vector3.right);
+        var adjustedDirection = upRotation * direction;
+        ballController.ShootBall(adjustedDirection, 2f);
     }
 }

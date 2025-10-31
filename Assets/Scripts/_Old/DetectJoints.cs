@@ -126,11 +126,11 @@ public class DetectJoints : MonoBehaviour
 
             lastFilteredZ = relativeFilteredZ;
 
-            DebugLayer.Instance.field_bodyHipZ.text = "Body Hip Z: " + body.Joints[JointType.HipLeft].Position.Z.ToString("F2");
-            DebugLayer.Instance.field_rightHandZ.text = "Right Hand Z: " + body.Joints[JointType.HandRight].Position.Z.ToString("F2");
-            DebugLayer.Instance.field_distance.text = "Distância: " + Mathf.Abs(hipZ - pos.Z).ToString("F2");
-            DebugLayer.Instance.field_trown.text = hasThrown ? "Arremessou" : "IDLE";
-            DebugLayer.Instance.field_trown.color = hasThrown ? Color.green : Color.yellow;
+            // DebugLayer.Instance.field_bodyHipZ.text = "Body Hip Z: " + body.Joints[JointType.HipLeft].Position.Z.ToString("F2");
+            // DebugLayer.Instance.field_rightHandZ.text = "Right Hand Z: " + body.Joints[JointType.HandRight].Position.Z.ToString("F2");
+            // DebugLayer.Instance.field_distance.text = "Distância: " + Mathf.Abs(hipZ - pos.Z).ToString("F2");
+            // DebugLayer.Instance.field_trown.text = hasThrown ? "Arremessou" : "IDLE";
+            // DebugLayer.Instance.field_trown.color = hasThrown ? Color.green : Color.yellow;
             // --- Fim detecção arremesso ---
 
             // var rot = body.JointOrientations[TrackedJoint].Orientation;

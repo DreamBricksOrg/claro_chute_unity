@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using DG.Tweening;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UI_QRCode : UI
 {
@@ -11,6 +13,7 @@ public class UI_QRCode : UI
     private Texture2D currentQRTexture;
     private bool videoIsProcessed = false;
     private int currentTimeout = 0;
+    public CanvasGroup qrcodeCanvasGroup;
 
     internal override void Start()
     {
@@ -25,12 +28,13 @@ public class UI_QRCode : UI
         EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
         EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
         DisposeCurrentTexture();
-        base.OnDestroy();
     }
 
     internal override void OnShow(object data, Action<object> callback)
     {
         base.OnShow(data, callback);
+
+        qrcodeCanvasGroup.alpha = 0;
 
         var jsonData = new JSONObject();
         jsonData["player_id"] = GameRoundController.Instance.playerId;
@@ -41,7 +45,6 @@ public class UI_QRCode : UI
 
         currentTimeout = Config.Instance.configData["timeout"]["qrcode"].AsInt;;
         InvokeRepeating(nameof(CheckVideoProcessed), 1f, 1f);
-
 
         API.Request("/api/getqrcode",
             onSuccess: (result) =>
@@ -64,12 +67,14 @@ public class UI_QRCode : UI
                 }
                 catch (Exception e)
                 {
+                    CancelInvoke();
 				    EventManager.Section.SetSection(SectionTypes.Gameover);
                     Debug.LogError($"QR Parse Error: {e}");
                 }
             },
             onError: (error) =>
             {
+                CancelInvoke();
 				EventManager.Section.SetSection(SectionTypes.Gameover);
                 Debug.LogError("API Error: " + error);
             },
@@ -81,7 +86,11 @@ public class UI_QRCode : UI
     internal override void OnHide(object data, Action<object> callback)
     {
         base.OnHide(data, callback);
-        DisposeCurrentTexture();
+        CancelInvoke();
+        qrcodeCanvasGroup.DOFade(0, 0.3f).OnComplete(() =>
+        {
+            DisposeCurrentTexture();
+        });
     }
 
     private void OnVideoReplayProcess()
