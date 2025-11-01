@@ -174,6 +174,11 @@ public class Main : MonoBehaviour
             case SectionTypes.Terms:
                 LogManager.SendLog("TOTEM_TERMS");
                 UI.Show(UITypes.Terms);
+                cts = Utils.DelayActionCancelable(timeoutArray["terms"].AsInt, () =>
+                {
+                    LogManager.SendLog("TOTEM_TERMS_NAO_ACEITO");
+                    EventManager.Section.SetSection(SectionTypes.Intro);
+                });
                 break;
             case SectionTypes.Gameover:
                 LogManager.SendLog("TOTEM_FIM_DE_JOGO");

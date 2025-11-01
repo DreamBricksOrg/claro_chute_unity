@@ -3662,7 +3662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &333292458
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7789,7 +7789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: licenseKey
-      value: license:62015:RAUV4pudbXd3ijCG
+      value: license:62420:PNMPL1pEi8sYgqWW
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: colorModuleOn
@@ -7813,7 +7813,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: sensorRotation
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: multisensorType
@@ -7821,7 +7821,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: autoActivateLicense
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: userTrackerModuleOn
@@ -8176,13 +8176,14 @@ MonoBehaviour:
   m_text: "<align=center><b>Consentimento de Participa\xE7\xE3o e Uso de Imagem</b></align>\n\nAo
     participar desta din\xE2mica, voc\xEA autoriza a captura de sua imagem e movimentos
     realizados diante da tela, bem como a utiliza\xE7\xE3o dessas grava\xE7\xF5es
-    em assets digitais enviados pela marca.\nAs grava\xE7\xF5es poder\xE3o ser exibidas
+    em assets digitais enviados pelas marcas: Claro Brasil, Warner Bros Discovery,
+    Grupo Publicis e Eletrom\xEDdia.\r\nAs grava\xE7\xF5es poder\xE3o ser exibidas
     nas telas do mobili\xE1rio urbano e, posteriormente, disponibilizadas por meio
     de QR code para resgate individual. Caso o QR code n\xE3o seja utilizado, o material
-    ser\xE1 automaticamente exclu\xEDdo e n\xE3o ser\xE1 armazenado.\nO per\xEDodo
-    de realiza\xE7\xE3o da din\xE2mica \xE9 de 04/11 a 10/11.\nAo levantar a m\xE3o
+    ser\xE1 automaticamente exclu\xEDdo e n\xE3o ser\xE1 armazenado.\r\nO per\xEDodo
+    de realiza\xE7\xE3o da din\xE2mica \xE9 de 04/11 a 10/11.\r\nAo levantar a m\xE3o
     para interagir com a tela, voc\xEA declara estar ciente e concorda com o uso
-    de sua imagem conforme\_descrito."
+    de sua imagem conforme descrito."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b061e871f81ddcf4281e6f007b31e6f8, type: 2}
   m_sharedMaterial: {fileID: 6783189088508061936, guid: b061e871f81ddcf4281e6f007b31e6f8, type: 2}
@@ -8209,8 +8210,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 38.5
+  m_fontSizeBase: 38.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -22889,7 +22890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1829934442
 RectTransform:
   m_ObjectHideFlags: 0
