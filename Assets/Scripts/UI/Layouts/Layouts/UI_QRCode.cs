@@ -4,7 +4,6 @@ using DG.Tweening;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 public class UI_QRCode : UI
 {
@@ -12,21 +11,20 @@ public class UI_QRCode : UI
     public RawImage qrCodeImage;
     private Texture2D currentQRTexture;
     private bool videoIsProcessed = false;
-    private int currentTimeout = 0;
+    // public int currentTimeout = 0;
     public CanvasGroup qrcodeCanvasGroup;
+    // private string currentUrl = "";
 
     internal override void Start()
     {
         base.Start();
         EventManager.VideoReplay.OnVideoReplayProcessEvent += OnVideoReplayProcess;
-        EventManager.VideoReplay.OnVideoReplayCompletedEvent += OnVideoReplayCompleted;
     }
 
     internal override void OnDestroy()
     {
         base.OnDestroy();
         EventManager.VideoReplay.OnVideoReplayProcessEvent -= OnVideoReplayProcess;
-        EventManager.VideoReplay.OnVideoReplayCompletedEvent -= OnVideoReplayCompleted;
         DisposeCurrentTexture();
     }
 
@@ -41,10 +39,11 @@ public class UI_QRCode : UI
 
         DisposeCurrentTexture();
 
-        videoIsProcessed = false;
+        // videoIsProcessed = false;
+        // currentUrl = "";
 
-        currentTimeout = Config.Instance.configData["timeout"]["qrcode"].AsInt;;
-        InvokeRepeating(nameof(CheckVideoProcessed), 1f, 1f);
+        // currentTimeout = Config.Instance.configData["timeout"]["qrcode"].AsInt;;
+        // InvokeRepeating(nameof(CheckVideoProcessed), 1f, 1f);
 
         API.Request("/api/getqrcode",
             onSuccess: (result) =>
@@ -61,6 +60,8 @@ public class UI_QRCode : UI
                         currentQRTexture = newTexture;
                         qrCodeImage.texture = currentQRTexture;
                     }
+                    
+                    qrcodeCanvasGroup.DOFade(1, 0.3f);
 
                     // Process Video
                     EventManager.VideoReplay.VideoReplayProcess();
@@ -86,6 +87,7 @@ public class UI_QRCode : UI
     internal override void OnHide(object data, Action<object> callback)
     {
         base.OnHide(data, callback);
+        // currentUrl = "";
         CancelInvoke();
         qrcodeCanvasGroup.DOFade(0, 0.3f).OnComplete(() =>
         {
@@ -95,13 +97,13 @@ public class UI_QRCode : UI
 
     private void OnVideoReplayProcess()
     {
+        // currentUrl = "";
         API.Request("/api/process-video/" + GameRoundController.Instance.playerId,
             onSuccess: (result) =>
             {
                 var jsonData = JSON.Parse(result);
                 Debug.Log("<<Video Generation Response>>" + jsonData.ToString());
-
-                // Loading
+                // currentUrl = jsonData["video"]["download_url"].Value;
                 EventManager.VideoReplay.VideoReplayCompleted(jsonData["video"]["download_url"].Value);
 
                 // {
@@ -133,20 +135,16 @@ public class UI_QRCode : UI
         );
     }
     
-    void CheckVideoProcessed()
-    {
-        currentTimeout--;
-        if (videoIsProcessed && currentTimeout <= 0)
-        {
-            EventManager.Section.SetSection(SectionTypes.Replay);
-            CancelInvoke();
-        }
-    }
-
-    private void OnVideoReplayCompleted(string url)
-    {
-        videoIsProcessed = true;
-    }
+    // void CheckVideoProcessed()
+    // {
+    //     Debug.Log("QR Timeout: " + currentTimeout);
+    //     currentTimeout--;
+    //     if (currentTimeout <= 0 && currentUrl != "")
+    //     {
+    //         EventManager.VideoReplay.VideoReplayCompleted(currentUrl);
+    //         CancelInvoke();
+    //     }
+    // }
 
     private void DisposeCurrentTexture()
     {

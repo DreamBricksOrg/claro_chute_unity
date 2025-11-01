@@ -337,7 +337,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 540, y: -197.49501}
-  m_SizeDelta: {x: 800, y: 0}
+  m_SizeDelta: {x: 800, y: 219.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &26196256
 MonoBehaviour:
@@ -2159,7 +2159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &214276810
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15186,7 +15186,7 @@ MonoBehaviour:
   waitForPictureList: []
   waitForPictureList2: []
   itemList:
-  - foldout: 0
+  - foldout: 1
     driven: {fileID: 1608415384}
     canvasComponent: {fileID: 1608415387}
     globalDelay: 0
@@ -15377,7 +15377,7 @@ MonoBehaviour:
     isLocked: 0
     localRestPosition: {x: 0, y: 0, z: 0}
     localRestScale: {x: 1, y: 1, z: 1}
-  - foldout: 0
+  - foldout: 1
     driven: {fileID: 1124376434}
     canvasComponent: {fileID: 1124376438}
     globalDelay: 0
@@ -15386,7 +15386,7 @@ MonoBehaviour:
       position:
         isEnabled: 0
         delay: 0
-        value: {x: 0, y: 99.99997, z: 0}
+        value: {x: 0, y: 100.00004, z: 0}
         duration: 1
         ease: 12
         easeCurve:
@@ -17168,6 +17168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 12a7c0d06bddbcb46926fa9a3ecc61ca, type: 3}
   beginSectionType: 10
+  currentSectionType: 10
 --- !u!1 &1362317011
 GameObject:
   m_ObjectHideFlags: 0
@@ -22888,7 +22889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1829934442
 RectTransform:
   m_ObjectHideFlags: 0

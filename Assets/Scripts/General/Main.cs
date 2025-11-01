@@ -18,6 +18,7 @@ public class Main : MonoBehaviour
 
     [Header("Section")]
     public SectionTypes beginSectionType = SectionTypes.Intro;
+    public SectionTypes currentSectionType = SectionTypes.Intro;
 
     void OnEnable()
     {
@@ -120,6 +121,7 @@ public class Main : MonoBehaviour
         var timeoutArray = Config.Instance.configData["timeout"];
         UI.HideAll();
         Utils.CancelDelay(cts);
+        currentSectionType = sectionType;
         switch (sectionType)
         {
             case SectionTypes.Intro:
@@ -160,6 +162,10 @@ public class Main : MonoBehaviour
             case SectionTypes.QRCode:
                 LogManager.SendLog("TOTEM_QRCODE");
                 UI.Show(UITypes.QRCode);
+                cts = Utils.DelayActionCancelable(timeoutArray["qrcode"].AsInt, () =>
+                {
+                    EventManager.Section.SetSection(SectionTypes.Replay);
+                });
                 break;
             case SectionTypes.Replay:
                 LogManager.SendLog("TOTEM_REPLAY");

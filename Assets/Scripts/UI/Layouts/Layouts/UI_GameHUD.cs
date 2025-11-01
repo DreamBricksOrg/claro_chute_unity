@@ -61,9 +61,8 @@ public class UI_GameHUD : UI
     internal override void Start()
     {
         base.Start();
-        ClearRoundToggles();
-        CreateRoundToggles(Config.Instance.configData["game"]["roundCount"].AsInt);
         UpdateRound();
+        CreateRoundToggles(Config.Instance.configData["game"]["roundCount"].AsInt);
     }
 
     void ClearRoundToggles()
@@ -76,6 +75,7 @@ public class UI_GameHUD : UI
 
     void CreateRoundToggles(int roundCount)
     {
+        ClearRoundToggles();
         toggleList = new Toggle[roundCount];
         for (int i = 0; i < roundCount; i++)
         {
@@ -90,7 +90,6 @@ public class UI_GameHUD : UI
         fieldGameShootSpeed.text = "";
         uiAnimSpeed.Out();
         Invoke(nameof(UpdateRound), 0.1f);
-
         if (isRecording) StopRecording();
     }
 
@@ -102,15 +101,21 @@ public class UI_GameHUD : UI
 
     void ApplySpeedText(float speed)
     {
-        fieldGameShootSpeed.text = speed.ToString("0") + "<size=40%>km/h</size>";
+        fieldGameShootSpeed.SetText(speed.ToString("0") + "<size=40%>km/h</size>");
     }
 
     void UpdateRound()
     {
-        var roundList = GameRoundController.Instance.gameScoreList;
-        for (int i = 0; i < toggleList.Length; i++)
+        try
         {
-            toggleList[i].isOn = (roundList.Count > i);
+            var roundList = GameRoundController.Instance.gameScoreList;
+            for (int i = 0; i < toggleList.Length; i++)
+            {
+                toggleList[i].isOn = (roundList.Count > i);
+            }
+        }
+        catch (Exception)
+        {            
         }
     }
 
@@ -132,6 +137,7 @@ public class UI_GameHUD : UI
     private void OnGameStart()
     {
         UpdateRound();
+        CreateRoundToggles(Config.Instance.configData["game"]["roundCount"].AsInt);
         // uIAnimationModule.gameObject.SetActive(false);
         // uIAnimationModule.Out();
     }
