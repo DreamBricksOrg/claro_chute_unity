@@ -34,6 +34,10 @@ public class ThrowDetector : MonoBehaviour
     public bool isDebugMode = false;
     public bool isPlaying = false;
 
+    public NuiTrackBodyController nuiTrackBodyController;
+
+    public bool isLeftFoot = false;
+
     void OnEnable()
     {
         EventManager.Game.OnGameStartEvent += OnGameStart;
@@ -111,6 +115,16 @@ public class ThrowDetector : MonoBehaviour
             if (currentVelocity > movementPeakVelocity)
                 movementPeakVelocity = currentVelocity;
         }
+
+        if (!isMovingFast &&
+        (isLeftFoot && !nuiTrackBodyController.isFootLeftVisible 
+        || !isLeftFoot && !nuiTrackBodyController.isFootRightVisible))
+        {
+            wasMoving = false;
+            movementDistance = 0f;
+            accumulatedVelocity = 0f;
+            movementPeakVelocity = 0f;
+        } 
 
         if (wasMoving && isSlowingDown)
         {

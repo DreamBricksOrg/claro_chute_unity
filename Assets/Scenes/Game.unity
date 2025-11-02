@@ -6229,6 +6229,8 @@ MonoBehaviour:
   meshrender: {fileID: 566184007}
   isDebugMode: 0
   isPlaying: 0
+  nuiTrackBodyController: {fileID: 4710897775575865}
+  isLeftFoot: 0
 --- !u!23 &566184007
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7813,7 +7815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: sensorRotation
-      value: 90
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: multisensorType
@@ -7825,6 +7827,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
       propertyPath: userTrackerModuleOn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
+      propertyPath: depth2ColorRegistration
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11436578, guid: e999ace05c586574fa1b964016f28531, type: 3}
@@ -14317,6 +14323,8 @@ MonoBehaviour:
   meshrender: {fileID: 991119086}
   isDebugMode: 0
   isPlaying: 0
+  nuiTrackBodyController: {fileID: 4710897775575865}
+  isLeftFoot: 1
 --- !u!23 &991119086
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -21897,6 +21905,8 @@ MonoBehaviour:
   meshrender: {fileID: 0}
   isDebugMode: 0
   isPlaying: 1
+  nuiTrackBodyController: {fileID: 0}
+  isLeftFoot: 0
 --- !u!23 &1711807332
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -24361,6 +24371,8 @@ MonoBehaviour:
   meshrender: {fileID: 0}
   isDebugMode: 0
   isPlaying: 1
+  nuiTrackBodyController: {fileID: 0}
+  isLeftFoot: 0
 --- !u!23 &1926172076
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26439,6 +26451,10 @@ MonoBehaviour:
   handRightTarget: {fileID: 2134389377}
   footLeftTarget: {fileID: 991119084}
   footRightTarget: {fileID: 566184005}
+  isFootLeftVisible: 0
+  isFootRightVisible: 0
+  footLeftVisibleCount: 0
+  footRightVisibleCount: 0
   jointScale: 1.5
   fixedLocation: {x: 0, y: 0.2, z: 3.5}
   headRotationOffset: {x: 0, y: 0, z: 0}

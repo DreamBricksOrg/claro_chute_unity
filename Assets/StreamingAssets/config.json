@@ -7,9 +7,9 @@
         "ranking": 6,
         "howtoplay": 6,
         "terms": 10,
-        "finalscore": 6,
-        "qrcode": 30,
-        "gameover": 6
+        "finalscore": 3,
+        "qrcode": 3,
+        "gameover": 3
     },
     "settings":{
         "bgmVolume": 80,
@@ -18,20 +18,20 @@
     },
     "info":{
         "scheduleStart": "08:00",
-        "scheduleStop": "23:00"
+        "scheduleStop": "22:00"
     },
     "kinect":{
         "handTrackingSensibility": 2.0,
         "showDebugFeet": false
     },
     "game":{
-        "roundCount": 3,
+        "roundCount": 10,
         "duration": 60,
         "ballPower": 2.0,
         "ballSpeedLimitRange": [1.0, 10.0],
         "ballLifespan": 3,
         "uiSpeedMultiplier": 8.0,
-        "throwVelocityThreshold": 1.0,
+        "throwVelocityThreshold": 5.0,
         "throwDecelerationThreshold": 5.0,
         "playerLocation": {
             "x": 0,

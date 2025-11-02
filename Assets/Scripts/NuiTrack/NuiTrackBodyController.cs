@@ -13,6 +13,13 @@ public class NuiTrackBodyController : NuitrackSDK.Avatar.BaseAvatar
     public Transform handRightTarget;
     public Transform footLeftTarget;
     public Transform footRightTarget;
+    public bool isFootLeftVisible;
+    public bool isFootRightVisible;
+
+    public int footLeftVisibleCount;
+
+    public int footRightVisibleCount;
+
 
     [Header("Escala e posição")]
     public float jointScale = 2f;
@@ -27,7 +34,7 @@ public class NuiTrackBodyController : NuitrackSDK.Avatar.BaseAvatar
 
     public Vector3 groundLimit = new Vector3(-10f, 0f, -10f);
 
-    private bool isBodyTracking = false;
+    // private bool isBodyTracking = false;
 
     private Dictionary<Transform, Quaternion> lastRotations = new Dictionary<Transform, Quaternion>();
 
@@ -94,6 +101,7 @@ public class NuiTrackBodyController : NuitrackSDK.Avatar.BaseAvatar
             -joitWaist.Position.z
         );
         var skeletonRootBase = kalmanSpine.Update(spineBaseRaw);
+        // var skeletonRootBase = spineBaseRaw;
 
         transform.position = fixedLocation;
 
@@ -119,16 +127,55 @@ public class NuiTrackBodyController : NuitrackSDK.Avatar.BaseAvatar
 
         var joint = GetJoint(jointType);
 
-        if (joint.Confidence <= 0.1f) return;
+
+        if (jointType == JointType.LeftAnkle)
+        {
+            if (joint.Confidence >= 0.5f)
+            {
+                footLeftVisibleCount++;
+            }
+            else
+            {
+                footLeftVisibleCount = 0;
+            }
+
+            isFootLeftVisible = footLeftVisibleCount > 2; 
+        }
+        else if (jointType == JointType.RightAnkle)
+        {
+            if (joint.Confidence >= 0.5f)
+            {
+                footRightVisibleCount++;
+            }
+            else
+            {
+                footRightVisibleCount = 0;
+            }
+
+            isFootRightVisible = footRightVisibleCount > 2;
+        }
+
+        if (joint.Confidence <= 0.5f) return;
 
         var raw = new Vector3(
             -joint.Position.x,
             joint.Position.y,
             -joint.Position.z
         );
+
         var filtered = kalman.Update(raw);
+        // var filtered = raw;
         var relative = filtered - rootBase;
 
+        // if (jointType == JointType.RightAnkle)
+        // {
+        //     Debug.Log("RF Raw: " + joint.Position.x + "/" + joint.Position.y + "/" + joint.Position.z + " K: " + filtered.x + "/" + filtered.y + "/" + filtered.z + "\n");
+        // }
+        // if (jointType == JointType.LeftAnkle)
+        // {
+        //     Debug.Log("LF Raw: " + joint.Position.x + "/" + joint.Position.y + "/" + joint.Position.z + " K: " + filtered.x + "/" + filtered.y + "/" + filtered.z + "\n");
+        // }
+    
         target.localPosition = relative * jointScale;
         target.localPosition = ClampVector3(target.localPosition, groundLimit);
 
